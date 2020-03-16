@@ -1,55 +1,172 @@
-import networkx as nx
-import matplotlib.pyplot as plt
+# import networkx as nx
+# import matplotlib.pyplot as plt
 
 class Graph:
-    def __init__(self,no_of_vertices):
-        self.V = no_of_vertices
-        self.adj = []
+    def __init__(self):
+        self.num_vertices = 0
+        self.num_edges = 0
         
-    def addEdge(self,u,v,w):
-        self.adj.append([u,v,w])
+        # {tail: {head: value}}
+        self.adjacency = {}
+
+        # {head: {tails}}
+        self.incident_vertices = {}
+    
+    def add_vertex(self, vertex):
+        if vertex not in self.adjacency:
+            self.adjacency[vertex] = {}
+            self.num_vertices += 1
+        if vertex not in self.incident_vertices:
+            self.incident_vertices[vertex] = set()
         
-    def isDistinctWeight(self):
-        weight = []
-        for i in range(len(self.adj)):
-            u,v,w = self.adj[i]
-            weight.append(w)
-        if( len(set(weight)) == len(weight)):
+    def add_edge(self,head,tail,weight):
+        self.add_vertex(head)
+        self.add_vertex(tail)
+
+        # Self edge => invalid
+        if head==tail:
+            return
+
+        self.adjacency[head][tail] = weight
+        self.incident_vertices[tail].add(head)
+
+        self.adjacency[tail][head] = weight
+        self.incident_vertices[head].add(tail)
+        
+    def distinct_weight(self):
+        weights = []
+        for tail in self.adjacency:
+            for head in self.adjacency[vertex]:
+                head, tail, weight = self.adjacency[head][tail]
+            weights.append(weight)
+        
+        if( len(set(weights)) == len(weights)):
             return True
         else:
             return False
         
-    def myGraph(self):
-        for i in range(len(self.adj)):
-            u,v,w = self.adj[i]
-            print ("%d -> %d == %d" % (u,v,w))
+    def __str__(self):
+        string = ''
+        for tail in self.adjacency:
+            for head in self.adjacency[tail]:
+                weight = self.adjacency[head][tail]
+                string += "%d -> %d == %d\n" % (head, tail, weight)
+        return string
+
+    def get_edges(self):
+        output = []
+        for tail in self.adjacency:
+            for head in self.adjacency[tail]:
+                output.append((tail, head, self.adjacency[head][tail]))
+        return output
+    
+    def get_vertices(self):
+        return self.adjacency.keys()
+
+    def adjacent(self, tail, head):
+        if tail in self.adjacency:
+            if head in self.adjacency[tail]:
+                return True
+        return False
+
+    def neighbours(self, vertex):
+        if vertex not in self.adjacency:
+            return []
+        else:
+            return self.adjacency[vertex].keys()
+
+    def incident(self, vertex):
+        if vertex not in self.incident_vertices:
+            return []
+        return list(self.incident_vertices[vertex])
+
+    def remove_edge(self, tail, head):
+        if tail in self.adjacency:
+            if head in self.adjacency[tail]:
+                del self.adjacency[tail][head]
+                self.incident_vertices[head].remove(tail)
+        if head in self.adjacency:
+            if tail in self.adjacency[head]:
+                del self.adjacency[head][tail]
+                self.incident_vertices[tail].remove(head)
+
+    def remove_vertex(self, vertex):
+        if vertex not in self.adjacency:
+            return
+
+        if vertex in self.values:
+            del self.values[vertex]
+
+        for head in self.adjacency[vertex]:
+            self.incident_vertices[head].remove(vertex)
+
+        for tail in self.incident_vertices[vertex]:
+            del self.adjacency[tail][vertex]
+
+        del self.adjacency[vertex]
+        del self.incident_vertices[vertex]
+
+    @staticmethod
+    def build(vertices=[], edges=[]):
+        g = Graph()
+        for vertex in vertices:
+            g.add_vertex(vertex)
+        for edge in edges:
+            g.add_edge(*edge)
+        return g
 
     def myGraphViz(self):
         G = nx.Graph()
-        for i in range(len(self.adj)):
-            u,v,w = self.adj[i]
-            G.add_edge(u,v,weight=w)
+        for head in self.adjacency:
+            for tail in self.adjacency[vertex]:
+                head, tail, weight = self.adjacency[head][tail]
+                G.add_edge(head, tail, weight = weight)
         nx.draw(G, with_labels = True)
         plt.show()
-        
-    def find(self, parent, i): 
-        if parent[i] == i: 
-            return i
-        else:
-            return self.find(parent, parent[i]) 
-  
-    def union(self, parent,rank,vertex1,vertex2):
-        
-        root1 = self.find(parent,vertex1)
-        root2 = self.find(parent,vertex2)
-       
-        if rank[root1] < rank[root2]: 
-            parent[root1] = root2 
-        elif rank[root1] > rank[root2]: 
-            parent[root2] = root1
-        else : 
-            parent[root2] = root1
-            rank[root1] = rank[root1]+1
+
+    class UnionFind(object):
+        def __init__(self):
+            self.parent = {}
+            self.rank = {}
+
+        def __len__(self):
+            return len(self.parent)
+
+        def make_set(self, item):
+            if item in self.parent:
+                return self.find(item)
+
+            self.parent[item] = item
+            self.rank[item] = 0
+            return item
+
+        def find(self, item):
+            if item not in self.parent:
+                return self.make_set(item)
+            if item != self.parent[item]:
+                self.parent[item] = self.find(self.parent[item])
+            return self.parent[item]
+
+
+        def union(self, item1, item2):
+            root1 = self.find(item1)
+            root2 = self.find(item2)
+
+            if root1 == root2:
+                return root1
+
+            if self.rank[root1] > self.rank[root2]:
+                self.parent[root2] = root1
+                return root1
+
+            if self.rank[root1] < self.rank[root2]:
+                self.parent[root1] = root2
+                return root2
+
+            if self.rank[root1] == self.rank[root2]:
+                self.rank[root1] += 1
+                self.parent[root2] = root1
+                return root1
             
     def Kruskal(self): 
 
@@ -80,6 +197,32 @@ class Graph:
             
         for u,v,w in MST: 
             print ("%d -> %d == %d" % (u,v,w)) 
+
+    def kruskal_mst(graph):
+        mst_edges = []
+        edges = graph.get_edges()
+        num_vertices = len(graph.get_vertices())
+
+        edges = graph.get_edges()
+        edges.sort(key=lambda e: e[2])
+
+        union_find = Graph.UnionFind()
+
+        index = 0
+        while index < num_vertices:
+            edge = edges[index]
+            [tail, head, value] = edge
+            index += 1
+
+            if union_find.find(head) == union_find.find(tail):
+                continue
+            else:
+                union_find.union(head, tail)
+            mst_edges.append(edge)
+
+        mst = Graph.build(edges=mst_edges)
+        return mst
+
 
     def Boruvka(self):
         if(self.isDistinctWeight):
@@ -131,3 +274,10 @@ class Graph:
                             
   
 
+g = Graph()
+g = Graph.build([1,2,3,4], [[1,2,1], [1,3,1], [1,4,1], [2,3,1], [3,4,1], [2,4,1]])
+# print(g.adjacency)
+kg = Graph.kruskal_mst(g)
+print(str(g))
+
+print(kg)
