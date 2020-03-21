@@ -34,17 +34,22 @@ class Graph:
         self.incident_vertices[head].add(tail)
         
     def distinct_weight(self):
-        weights = []
-        for tail in self.adjacency:
-            for head in self.adjacency[vertex]:
-                head, tail, weight = self.adjacency[head][tail]
-            weights.append(weight)
-        
-        if( len(set(weights)) == len(weights)):
-            return True
-        else:
-            return False
-        
+        edges = self.get_edges()
+        for edge in edges:
+            head,tail,weight = edge
+            edges.remove((tail,head,weight))
+        for  i in range(len(edges)):
+            edges[i] = list(edges[i])
+            
+        edges.sort(key=lambda e: e[2])
+        for i in range(len(edges)-1):
+            if edges[i][2] >= edges[i+1][2]:
+                edges[i+1][2]=edges[i][2]+1
+        for edge in edges:
+            head,tail,weight = edge
+            self.adjacency[head][tail] = weight
+            self.adjacency[tail][head] = weight
+                    
     def __str__(self):
         string = ''
         for tail in self.adjacency:
@@ -275,9 +280,11 @@ class Graph:
   
 
 g = Graph()
-g = Graph.build([1,2,3,4], [[1,2,1], [1,3,1], [1,4,1], [2,3,1], [3,4,1], [2,4,1]])
+g = Graph.build([1,3,2,4], [[1,2,1], [1,3,1], [1,4,1], [2,3,1], [3,4,1], [2,4,1]])
+g.distinct_weight()
+#print(g.get_edges())
 # print(g.adjacency)
 kg = Graph.kruskal_mst(g)
-print(str(g))
+#print(str(g))
 
 print(kg)
