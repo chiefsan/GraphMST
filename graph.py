@@ -251,6 +251,9 @@ class Graph:
         num_vertices = len(graph.get_vertices())
 
         edges = graph.get_edges()
+        for edge in edges:
+            head,tail,weight = edge
+            edges.remove((tail,head,weight))
         edges.sort(key=lambda e: e[2])
 
         union_find = Graph.UnionFind()
@@ -326,8 +329,8 @@ g = Graph.build([0,1,2,3], [[0,1,1], [0,2,1], [0,3,1], [1,2,1], [2,3,1]])
 g.distinct_weight()
 #print(g.get_edges())
 # print(g.adjacency)
-#kg = Graph.kruskal_mst(g)
+kg = Graph.kruskal_mst(g)
 #print(str(g))
-#print(kg)
+print(kg)
 pg = Graph.prims_mst(g)
 print(pg)
