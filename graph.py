@@ -1,6 +1,7 @@
 # import networkx as nx
 # import matplotlib.pyplot as plt
-
+import math
+import random
 class Graph:
     def __init__(self):
         self.num_vertices = 0
@@ -173,6 +174,46 @@ class Graph:
                 self.parent[root2] = root1
                 return root1
             
+    def prims_mst(graph):
+        
+        mst_vertices = set()
+        key = [math.inf]* graph.num_vertices
+        parent = [None] * graph.num_vertices
+        graph_vertices = graph.get_vertices()
+        
+        start_vertex = random.randrange(0,graph.num_vertices) #choosing a random vertex to start (should write a generalized one using graph_vertices)
+        key[start_vertex] = 0
+        parent[start_vertex] = -1
+
+        
+        while len(mst_vertices) != graph.num_vertices:
+            
+            min = math.inf
+            for vertex in graph_vertices: 
+                if key[vertex] < min and vertex not in mst_vertices: 
+                    min = key[vertex] 
+                    min_key_vertex = vertex
+                    
+            mst_vertices.add(min_key_vertex)
+            head = min_key_vertex
+
+            for tail in graph.incident_vertices[head]:
+                if tail not in mst_vertices and graph.adjacency[head][tail] < key[tail] :
+                    key[tail] = graph.adjacency[head][tail]
+                    parent[tail]= head
+        
+        mst_edges = []
+        
+        for tail in range(graph.num_vertices):
+            if parent[tail] != -1:
+               head = parent[tail]
+               edge = [head,tail,graph.adjacency[head][tail]]
+               mst_edges.append(edge)
+
+        mst = Graph.build(edges = mst_edges)
+        return mst
+
+
     def Kruskal(self): 
 
         MST =[] 
@@ -202,6 +243,7 @@ class Graph:
             
         for u,v,w in MST: 
             print ("%d -> %d == %d" % (u,v,w)) 
+
 
     def kruskal_mst(graph):
         mst_edges = []
@@ -280,11 +322,12 @@ class Graph:
   
 
 g = Graph()
-g = Graph.build([1,3,2,4], [[1,2,1], [1,3,1], [1,4,1], [2,3,1], [3,4,1], [2,4,1]])
+g = Graph.build([0,1,2,3], [[0,1,1], [0,2,1], [0,3,1], [1,2,1], [2,3,1]])
 g.distinct_weight()
 #print(g.get_edges())
 # print(g.adjacency)
-kg = Graph.kruskal_mst(g)
+#kg = Graph.kruskal_mst(g)
 #print(str(g))
-
-print(kg)
+#print(kg)
+pg = Graph.prims_mst(g)
+print(pg)
