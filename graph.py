@@ -1,6 +1,6 @@
 import math
 import random
-
+from collections import defaultdict
 import matplotlib.pyplot as plt
 import networkx as nx
 
@@ -8,7 +8,6 @@ import networkx as nx
 class Graph:
     '''
     Data structure to store graphs (based on adjacency lists)
-
     Data Members
     ------------
     num_vertices : int, number of vertices
@@ -32,7 +31,6 @@ class Graph:
     def add_vertex(self, vertex):
         '''
         Adds a vertex to the graph
-
         Parameters
         ----------
         vertex : hashable object
@@ -44,7 +42,6 @@ class Graph:
     def add_edge(self, head, tail, weight):
         '''
         Adds an edge to the graph
-
         Parameters
         ----------
         head : vertex
@@ -110,9 +107,8 @@ class Graph:
 
     def adjacent(self, tail, head):
         '''
-        Returns True if there is an edge between head and tail, 
+        Returns True if there is an edge between head and tail,
             False otherwise
-
         Parameters
         ---------
         tail : vertex
@@ -127,7 +123,6 @@ class Graph:
         '''
         Returns a list of all tails such that there is an
             edge between vertex and tail
-
         Parameters
         ---------
         vertex : vertex
@@ -140,7 +135,6 @@ class Graph:
     def remove_edge(self, tail, head):
         '''
         Removes an edge from the graphs
-
         Parameters
         ---------
         tail : vertex
@@ -149,16 +143,14 @@ class Graph:
         if tail in self.adjacency:
             if head in self.adjacency[tail]:
                 del self.adjacency[tail][head]
-                self.incident_vertices[head].remove(tail)
+
         if head in self.adjacency:
             if tail in self.adjacency[head]:
                 del self.adjacency[head][tail]
-                self.incident_vertices[tail].remove(head)
 
     def remove_vertex(self, vertex):
         '''
         Removes a vertex (and edges incident on the vertex) from the graph
-
         Parameters
         ---------
         vertex : vertex
@@ -177,7 +169,6 @@ class Graph:
     def build(vertices=[], edges=[]):
         '''
         Builds a graph from the given set of vertices and edges
-
         Parameters
         ----------
         vertices : list of vertices where each element is a vertex
@@ -204,7 +195,6 @@ class Graph:
 
     class UnionFind(object):
         '''
-
         '''
 
         def __init__(self):
@@ -250,14 +240,17 @@ class Graph:
                 return root1
 
     def prims_mst(graph):
-
+        '''
+        Implementation of Prim's algorithm
+        Time Complexity: 
+        '''
         mst_vertices = set()
-        key = [math.inf] * graph.num_vertices
-        parent = [None] * graph.num_vertices
-        graph_vertices = graph.get_vertices()
+        key = defaultdict(lambda: math.inf)
+        parent = defaultdict(lambda: None)
 
-        # choosing a random vertex to start (should write a generalized one using graph_vertices)
-        start_vertex = random.randrange(0, graph.num_vertices)
+        graph_vertices = list(graph.get_vertices())
+
+        start_vertex = random.choice(graph_vertices)
         key[start_vertex] = 0
         parent[start_vertex] = -1
 
@@ -272,14 +265,14 @@ class Graph:
             mst_vertices.add(min_key_vertex)
             head = min_key_vertex
 
-            for tail in graph.incident_vertices[head]:
+            for tail in graph.adjacency[head]:
                 if tail not in mst_vertices and graph.adjacency[head][tail] < key[tail]:
                     key[tail] = graph.adjacency[head][tail]
                     parent[tail] = head
 
         mst_edges = []
 
-        for tail in range(graph.num_vertices):
+        for tail in graph_vertices:
             if parent[tail] != -1:
                 head = parent[tail]
                 edge = [head, tail, graph.adjacency[head][tail]]
@@ -288,37 +281,11 @@ class Graph:
         mst = Graph.build(edges=mst_edges)
         return mst
 
-    def Kruskal(self):
-
-        MST = []
-        self.adj = sorted(self.adj, key=lambda item: item[2])
-
-        parent = []
-        rank = []
-
-        for i in range(self.V):
-            parent.append(i)
-            rank.append(0)
-
-        j = 0
-        e = 0
-
-        while e < self.V - 1:
-
-            u, v, w = self.adj[j]
-            j += 1
-            x = self.find(parent, u)
-            y = self.find(parent, v)
-
-            if x != y:
-                e = e + 1
-                MST.append([u, v, w])
-                self.union(parent, rank, x, y)
-
-        for u, v, w in MST:
-            print("%d -> %d == %d" % (u, v, w))
-
     def kruskal_mst(graph):
+        '''
+        Implementation of Kruskal's algorithm
+        Time Complexity: 
+        '''
         mst_edges = []
         edges = graph.get_edges()
         num_vertices = len(graph.get_vertices())
@@ -346,62 +313,54 @@ class Graph:
         mst = Graph.build(edges=mst_edges)
         return mst
 
-    def Boruvka(self):
-        if(self.isDistinctWeight):
-            parent = []
-            rank = []
+    def boruvka_mst(graph):
+        '''
+        Implementation of Boruvka's algorithm
+        Time Complexity: 
+        '''
+        num_components = graph.num_vertices
 
-            cheapEdge = []
+        union_find = Graph.UnionFind()
+        mst_edges = []
+        while num_components > 1:
+            cheap_edge = {}
+            for vertex in graph.get_vertices():
+                cheap_edge[vertex] = -1
 
-            no_of_components = self.V
+            edges = graph.get_edges()
+            for edge in edges:
+                head, tail, weight = edge
+                edges.remove((tail, head, weight))
+            for edge in edges:
+                head, tail, weight = edge
+                set1 = union_find.find(head)
+                set2 = union_find.find(tail)
+                if set1 != set2:
+                    if cheap_edge[set1] == -1 or cheap_edge[set1][2] > weight:
+                        cheap_edge[set1] = [head, tail, weight]
 
-            for node in range(self.V):
-                parent.append(node)
-                rank.append(0)
-                cheapEdge = [-1] * self.V
-            nStep = 1
-
-            while no_of_components > 1 and nStep <= 2:
-
-                for i in range(len(self.adj)):
-                    u, v, w = self.adj[i]
-                    set1 = self.find(parent, u)
-                    set2 = self.find(parent, v)
-
-                    if set1 != set2:
-
-                        if cheapEdge[set1] == -1 or cheapEdge[set1][2] > w:
-                            cheapEdge[set1] = [u, v, w]
-
-                        if cheapEdge[set2] == -1 or cheapEdge[set2][2] > w:
-                            cheapEdge[set2] = [u, v, w]
-
-                for node in range(self.V):
-                    if cheapEdge[node] != -1:
-                        u, v, w = cheapEdge[node]
-                        set1 = self.find(parent, u)
-                        set2 = self.find(parent, v)
-
-                        if set1 != set2:
-                            self.union(parent, rank, set1, set2)
-                            print("%d -> %d == %d" % (u, v, w))
-                            no_of_components = no_of_components - 1
-
-                cheapEdge = [-1] * self.V
-                nStep += 1
-        else:
-            # Tie breaker algorithm to be added
-            print("The weight should be distinct")
+                    if cheap_edge[set2] == -1 or cheap_edge[set2][2] > weight:
+                        cheap_edge[set2] = [head, tail, weight]
+            for vertex in cheap_edge:
+                if cheap_edge[vertex] != -1:
+                    head, tail, weight = cheap_edge[vertex]
+                    if union_find.find(head) != union_find.find(tail):
+                        union_find.union(head, tail)
+                        mst_edges.append(cheap_edge[vertex])
+                        num_components = num_components - 1
+            mst = Graph.build(edges=mst_edges)
+            return mst
 
 
 g = Graph()
 g = Graph.build([0, 1, 2, 3], [[0, 1, 1], [0, 2, 1],
                                [0, 3, 1], [1, 2, 1], [2, 3, 1]])
 g.distinct_weight()
-# print(g.get_edges())
-# print(g.adjacency)
+
+
 kg = Graph.kruskal_mst(g)
-# print(str(g))
 print(kg)
 pg = Graph.prims_mst(g)
 print(pg)
+bg = Graph.boruvka_mst(g)
+print(bg)
