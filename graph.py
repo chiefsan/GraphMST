@@ -86,7 +86,8 @@ class Graph:
         for tail in self.adjacency:
             for head in self.adjacency[tail]:
                 weight = self.adjacency[head][tail]
-                string += "%d -> %d == %d\n" % (head, tail, weight)
+                #string += "%d -> %d == %d\n" % (head, tail, weight)
+                string += str(head)+' -> '+str(tail)+' == '+str(weight)+'\n'
         return string
 
     def get_edges(self):
@@ -353,8 +354,10 @@ class Graph:
 
 
 g = Graph()
-g = Graph.build([0, 1, 2, 3], [[0, 1, 1], [0, 2, 1],
-                               [0, 3, 1], [1, 2, 1], [2, 3, 1]])
+# g = Graph.build([0, 1, 2, 3], [[0, 1, 1], [0, 2, 1],
+#                           [0, 3, 1], [1, 2, 1], [2, 3, 1]])
+g = Graph.build(['a', 'b', 'c', 'd'], [['a', 'b', 1], ['a', 'c', 1],
+                                       ['a', 'd', 1], ['b', 'c', 1], ['c', 'd', 1]])
 g.distinct_weight()
 
 
