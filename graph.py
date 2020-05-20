@@ -349,8 +349,8 @@ class Graph:
                         union_find.union(head, tail)
                         mst_edges.append(cheap_edge[vertex])
                         num_components = num_components - 1
-            mst = Graph.build(edges=mst_edges)
-            return mst
+        mst = Graph.build(edges=mst_edges)
+        return mst
 
 
 g = Graph()
