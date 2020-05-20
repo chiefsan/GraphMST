@@ -365,16 +365,18 @@ class Graph:
     '''
     
     def kkt(graph):
-       g1 =  Graph.boruvka_mst(g)  #2 Boruvka's step  - STEP1
-       c =  list(set(g.get_edges()) - set(g1.get_edges())) #contracted edges in step1 
+       if len(graph.get_edges()) <= 1:
+           return graph
+       g1 =  Graph.boruvka_mst(graph)  #2 Boruvka's step  - STEP1
+       c =  list(set(graph.get_edges()) - set(g1.get_edges())) #contracted edges in step1 
        g1_edges = g1.get_edges()
        g2_edges = []
        for i in range(len(g1_edges)):
             coin = random.randint(0, 1)
             if coin == 1:   #Adding edge if its a head
                 g2_edges.append(g1_edges[i])
-       g2 = Graph.build(edges = g2_edges) # building the sub-graph  step2
-       print(g2) 
+       g2 = Graph.build(edges = g2_edges) # building a sub-graph  step2
+       f2 = kkt(g2)  
 
 g = Graph()
 # g = Graph.build([0, 1, 2, 3], [[0, 1, 1], [0, 2, 1],
