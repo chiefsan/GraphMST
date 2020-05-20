@@ -314,16 +314,16 @@ class Graph:
         mst = Graph.build(edges=mst_edges)
         return mst
 
-    def boruvka_mst(graph):
+    def boruvka_mst(graph, steps = 2):
         '''
         Implementation of Boruvka's algorithm
         Time Complexity: 
         '''
         num_components = graph.num_vertices
-
+        count = 1
         union_find = Graph.UnionFind()
         mst_edges = []
-        while num_components > 1:
+        while num_components > 1 and count <= 2:
             cheap_edge = {}
             for vertex in graph.get_vertices():
                 cheap_edge[vertex] = -1
@@ -349,9 +349,32 @@ class Graph:
                         union_find.union(head, tail)
                         mst_edges.append(cheap_edge[vertex])
                         num_components = num_components - 1
+            count += 1
         mst = Graph.build(edges=mst_edges)
         return mst
-
+    
+    '''
+    
+    - Use three applications of Boruvka phases with contractions of edges. That produces a graph G1 with at most n/8 vertices. Let C be the edges contracted during these phases. If G1 is a single vertex, then exit and return F=C.
+    - Let G2 = G1(p) be a randomly sampled subgraph of G1 with p = ½.
+    - Recursively applying algorithm MST, compute the minimum spanning forest F2 of the graph G2.
+    - Using a linear-time algorithm, find the F2-heavy edges in G1 and delete them to obtain a graph G3.
+    - Recursively apply algorithm MST to compute the minimum spanning forest F3 for G3.
+    - Return the forest F = C È F3.
+    
+    '''
+    
+    def kkt(graph):
+       g1 =  Graph.boruvka_mst(g)  #2 Boruvka's step  - STEP1
+       c =  list(set(g.get_edges()) - set(g1.get_edges())) #contracted edges in step1 
+       g1_edges = g1.get_edges()
+       g2_edges = []
+       for i in range(len(g1_edges)):
+            coin = random.randint(0, 1)
+            if coin == 1:   #Adding edge if its a head
+                g2_edges.append(g1_edges[i])
+       g2 = Graph.build(edges = g2_edges) # building the sub-graph  step2
+       print(g2) 
 
 g = Graph()
 # g = Graph.build([0, 1, 2, 3], [[0, 1, 1], [0, 2, 1],
@@ -360,10 +383,4 @@ g = Graph.build(['a', 'b', 'c', 'd'], [['a', 'b', 1], ['a', 'c', 1],
                                        ['a', 'd', 1], ['b', 'c', 1], ['c', 'd', 1]])
 g.distinct_weight()
 
-
-kg = Graph.kruskal_mst(g)
-print(kg)
-pg = Graph.prims_mst(g)
-print(pg)
-bg = Graph.boruvka_mst(g)
-print(bg)
+kkt(g)
