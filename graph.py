@@ -314,6 +314,38 @@ class Graph:
         mst = Graph.build(edges=mst_edges)
         return mst
 
+    def boruvka_step(graph, num_components, union_find, mst_edges):
+        '''
+        Implementation of Boruvka step
+        Time Complexity: 
+        '''
+        cheapest_edge = {}
+        for vertex in graph.get_vertices():
+            cheapest_edge[vertex] = -1
+
+        edges = graph.get_edges()
+        for edge in edges:
+            head, tail, weight = edge
+            edges.remove((tail, head, weight))
+        for edge in edges:
+            head, tail, weight = edge
+            set1 = union_find.find(head)
+            set2 = union_find.find(tail)
+            if set1 != set2:
+                if cheapest_edge[set1] == -1 or cheapest_edge[set1][2] > weight:
+                    cheapest_edge[set1] = [head, tail, weight]
+
+                if cheapest_edge[set2] == -1 or cheapest_edge[set2][2] > weight:
+                    cheapest_edge[set2] = [head, tail, weight]
+        for vertex in cheapest_edge:
+            if cheapest_edge[vertex] != -1:
+                head, tail, weight = cheapest_edge[vertex]
+                if union_find.find(head) != union_find.find(tail):
+                    union_find.union(head, tail)
+                    mst_edges.append(cheapest_edge[vertex])
+                    num_components = num_components - 1
+        return num_components, union_find, mst_edges
+
     def boruvka_mst(graph):
         '''
         Implementation of Boruvka's algorithm
@@ -324,33 +356,21 @@ class Graph:
         union_find = Graph.UnionFind()
         mst_edges = []
         while num_components > 1:
-            cheap_edge = {}
-            for vertex in graph.get_vertices():
-                cheap_edge[vertex] = -1
+            num_components, union_find, mst_edges = Graph.boruvka_step(graph, num_components, union_find, mst_edges)
 
-            edges = graph.get_edges()
-            for edge in edges:
-                head, tail, weight = edge
-                edges.remove((tail, head, weight))
-            for edge in edges:
-                head, tail, weight = edge
-                set1 = union_find.find(head)
-                set2 = union_find.find(tail)
-                if set1 != set2:
-                    if cheap_edge[set1] == -1 or cheap_edge[set1][2] > weight:
-                        cheap_edge[set1] = [head, tail, weight]
-
-                    if cheap_edge[set2] == -1 or cheap_edge[set2][2] > weight:
-                        cheap_edge[set2] = [head, tail, weight]
-            for vertex in cheap_edge:
-                if cheap_edge[vertex] != -1:
-                    head, tail, weight = cheap_edge[vertex]
-                    if union_find.find(head) != union_find.find(tail):
-                        union_find.union(head, tail)
-                        mst_edges.append(cheap_edge[vertex])
-                        num_components = num_components - 1
         mst = Graph.build(edges=mst_edges)
         return mst
+    
+    def kkt_mst(graph):
+        '''
+        Implementation of KKT Algorithm
+        Time Complexity:
+        '''
+        num_steps_remaining = 2
+        while graph.num_edges > 1 and num_steps_remaining > 0:
+            num_components, union_find, mst_edges = Graph.boruvka_step(graph, num_components, union_find, mst_edges)
+            num_steps_remaining -= 1
+
 
 
 g = Graph()
