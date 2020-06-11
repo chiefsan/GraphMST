@@ -1,6 +1,3 @@
-import math
-import random
-from collections import defaultdict
 # import matplotlib.pyplot as plt
 # import networkx as nx
 
@@ -255,13 +252,15 @@ class Graph:
         Implementation of Prim's algorithm
         Time Complexity: 
         '''
+        from collections import defaultdict
         mst_vertices = set()
+        from math import inf
         key = defaultdict(lambda: math.inf)
         parent = defaultdict(lambda: None)
 
         graph_vertices = list(graph.get_vertices())
-
-        start_vertex = random.choice(graph_vertices)
+        from random import choice
+        start_vertex = choice(graph_vertices)
         key[start_vertex] = 0
         parent[start_vertex] = -1
 
@@ -382,6 +381,8 @@ class Graph:
         Implementation of KKT Algorithm
         Time Complexity:
         '''
+        from collections import defaultdict
+        from random import random
         if first_call:
             union_find = Graph.UnionFind()
             num_components = graph.num_vertices
@@ -514,7 +515,7 @@ class Graph:
         return i if self.height[self.euler_tour[i]] < self.height[self.euler_tour[j]] else j
 
     def precompute_lca(self, root):
-
+        from collections import defaultdict
         # reserves from c++ can be omitted when we use python;
         # capacity is different from size as the latter counts actual items;
         # single-argument vector constructor adds that many actual items with unspecified value
