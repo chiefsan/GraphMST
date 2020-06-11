@@ -626,21 +626,21 @@ class Graph:
     
 
 
-g = Graph()
-# g = Graph.build([0, 1, 2, 3], [[0, 1, 1], [0, 2, 1],
-#                           [0, 3, 1], [1, 2, 1], [2, 3, 1]])
-g = Graph.build([0, 1, 2, 3, 4, 5], [[0, 1, 1], [0, 2, 1], [3, 4, 1], [3, 5, 1], [-1,0,1], [-1,3,1]])
-# g = Graph.build(['a', 'b', 'c', 'd'], [['a', 'b', 1], ['a', 'c', 1],
-#                                        ['a', 'd', 1], ['b', 'c', 1], ['c', 'd', 1]])
-g.distinct_weight()
+# g = Graph()
+# # g = Graph.build([0, 1, 2, 3], [[0, 1, 1], [0, 2, 1],
+# #                           [0, 3, 1], [1, 2, 1], [2, 3, 1]])
+# g = Graph.build([0, 1, 2, 3, 4, 5], [[0, 1, 1], [0, 2, 1], [3, 4, 1], [3, 5, 1], [-1,0,1], [-1,3,1]])
+# # g = Graph.build(['a', 'b', 'c', 'd'], [['a', 'b', 1], ['a', 'c', 1],
+# #                                        ['a', 'd', 1], ['b', 'c', 1], ['c', 'd', 1]])
+# g.distinct_weight()
 
 
-# kg = Graph.kruskal_mst(g)
-# print(kg)
-# pg = Graph.prims_mst(g)
-# print(pg)
-# bg = Graph.boruvka_mst(g)
-# print(bg)
+# # kg = Graph.kruskal_mst(g)
+# # print(kg)
+# # pg = Graph.prims_mst(g)
+# # print(pg)
+# # bg = Graph.boruvka_mst(g)
+# # print(bg)
 
-g.precompute_lca(-1)
-print(g.lca(1,3))
+# g.precompute_lca(-1)
+# print(g.lca(1,3))
