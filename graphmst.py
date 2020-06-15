@@ -1,7 +1,3 @@
-# import matplotlib.pyplot as plt
-# import networkx as nx
-
-
 class Graph:
     '''
     Data structure to store graphs (based on adjacency lists)
@@ -33,6 +29,8 @@ class Graph:
         self.st = None
         self.blocks = None
         self.block_mask = None
+
+        self.layout = None
 
 
     def add_vertex(self, vertex):
@@ -189,16 +187,25 @@ class Graph:
             g.add_edge(*edge)
         return g
 
-    def myGraphViz(self):
+    def myGraphViz(self, isbranchingtree=False, layout=None):
         '''
         Visualizes the graph using networkx
         '''
+        import matplotlib.pyplot as plt
+        import networkx as nx
         G = nx.Graph()
         for head in self.adjacency:
-            for tail in self.adjacency[vertex]:
-                head, tail, weight = self.adjacency[head][tail]
+            for tail in self.adjacency[head]:
+                weight = self.adjacency[head][tail]
                 G.add_edge(head, tail, weight=weight)
-        nx.draw(G, with_labels=True)
+        if layout == None:
+            layout = nx.spring_layout(G, seed=0)
+        if isbranchingtree:
+            layout = nx.circular_layout(G)
+        self.layout = layout
+        nx.draw(G, layout, with_labels=True)
+        labels = nx.get_edge_attributes(G, "weight")
+        nx.draw_networkx_edge_labels(G, pos=layout, edge_labels=labels)
         plt.show()
 
     class UnionFind(object):
@@ -233,6 +240,15 @@ class Graph:
 
             if root1 == root2:
                 return root1
+            
+            if isinstance(root1, str) and isinstance(root2, str):
+                if len(root1) > len(root2):
+                    self.parent[root2] = root1
+                    return root1
+
+                else:
+                    self.parent[root1] = root2
+                    return root2
 
             if self.rank[root1] > self.rank[root2]:
                 self.parent[root2] = root1
@@ -253,20 +269,21 @@ class Graph:
         Time Complexity: 
         '''
         from collections import defaultdict
-        mst_vertices = set()
         from math import inf
-        key = defaultdict(lambda: math.inf)
+        from random import choice
+
+        mst_vertices = set()
+        key = defaultdict(lambda: inf)
         parent = defaultdict(lambda: None)
 
         graph_vertices = list(graph.get_vertices())
-        from random import choice
         start_vertex = choice(graph_vertices)
         key[start_vertex] = 0
         parent[start_vertex] = -1
 
         while len(mst_vertices) != graph.num_vertices:
 
-            min = math.inf
+            min = inf
             for vertex in graph_vertices:
                 if key[vertex] < min and vertex not in mst_vertices:
                     min = key[vertex]
@@ -387,11 +404,12 @@ class Graph:
             union_find = Graph.UnionFind()
             num_components = graph.num_vertices
             mst_edges = []
-            
+
         if graph.num_edges > 1:
             num_steps_remaining = 2
             while graph.num_edges > 1 and num_steps_remaining > 0:
-                num_components, union_find, mst_edges = Graph.boruvka_step(graph, num_components, union_find, mst_edges)
+                num_components, union_find, mst_edges = Graph.boruvka_step(
+                    graph, num_components, union_find, mst_edges)
                 num_steps_remaining -= 1
             edges = graph.get_edges()
             graph3 = Graph()
@@ -403,101 +421,311 @@ class Graph:
                     random_num = random.random()
                     if random_num > 0.5:
                         graph3.add_edge(head, tail, weight)
-            num_components, union_find, graph4 = kkt_mst(graph3, union_find, False)
+            num_components, union_find, graph4 = kkt_mst(
+                graph3, union_find, False)
             graph3_copy = copy(graph3)
             edges = graph3.get_edges()
             vertices = graph3.get_vertices()
 
-            component_supervertex = defaultdict(bool)
-            
-            child = [-1]*graph3.num_vertices
-            sibling = [-1]*graph3.num_vertices
-            parent = [-1]*graph3.num_vertices
-            rightmostchild = [-1]*graph3.num_vertices
-                        
+            branchingtree = graph3.getbranchingtree()
 
-            branchingtree=Graph()
-            indmap = {}
-            ind=0
-            for vertex in vertices:
-                branchingtree.add_vertex(vertex)
-                indmap[vertex]=ind
-                ind+=1
-
-            num_components3 = graph.num_vertices
-            union_find3 = Graph.UnionFind()
-            mst_edges3 = []
-            workdone=True
-            level = 0
-            while num_components3 > 1  and workdone:
-                cheapest_edge = {}
-                workdone=False
-                for vertex in vertices:
-                    cheapest_edge[vertex] = -1
-                for edge in edges:
-                    head, tail, weight = edge
-                    edges.remove((tail, head, weight))
-                for edge in edges:
-                    head, tail, weight = edge
-                    set1 = union_find3.find(head)
-                    set2 = union_find3.find(tail)
-                    if set1 != set2:
-                        workdone=True
-                        if cheapest_edge[set1] == -1 or cheapest_edge[set1][2] > weight:
-                            cheapest_edge[set1] = [head, tail, weight]
-
-                        if cheapest_edge[set2] == -1 or cheapest_edge[set2][2] > weight:
-                            cheapest_edge[set2] = [head, tail, weight]
-                
-                for vertex in cheapest_edge:
-                    if cheapest_edge[vertex] != -1:
-                        workdone=True
-                        head, tail, weight = cheapest_edge[vertex]
-                        set1 = union_find3.find(head)
-                        set2 = union_find3.find(tail)
-                        if set1 != set2:
-                            union_find3.union(head, tail)
-                            mst_edges3.append(cheapest_edge[vertex])
-                            num_components3 = num_components3 - 1
-                            supervertex = min(str(set1), str(set2))+max(str(set1), str(set2)) + str(level)
-                            if supervertex not in indmap:
-                                ind = branchingtree.num_vertices
-                                indmap[supervertex] = ind
-                                parent.append(-1)
-                                parent[indmap[head]] = parent[indmap[tail]] = ind
-                                child.append(indmap[head])
-                                sibling[indmap[head]] = indmap[tail]
-                                rightmost.append(indmap[tail])
-                                branchingtree.add_vertex(supervertex)
-                                branchingtree.add_edge(head, supervertex, WEIGHT)
-                                branchingtree.add_edge(tail, supervertex, WEIGHT)
-                            else:
-                                ind = indmap[supervertex]
-                                if parent[indmap[head]]!=ind:
-                                    sibling[rightmostchild[ind]] = indmap[head]
-                                    parent[indmap[head]]=ind
-                                    branchingtree.add_edge(head, supervertex, WEIGHT)
-                                else:
-                                    sibling[rightmostchild[ind]] = indmap[tail]
-                                    parent[indmap[tail]]=ind
-                                    branchingtree.add_edge(tail, supervertex, WEIGHT)
-                level+=1
-            for vertex in vertices:
-                if parent[indmap[vertex]]==-1:
-                    branchingtree.add_edge('super_root', vertex, 1)
             branchingtree.precomputeLCA('super root')
             mst = Graph.build(edges=mst_edges)
-            
+            lower, upper = [], []
             for edge in edges:
                 head, tail, weight = edge
                 lca_head_tail = graph3.lca(head, tail)
-
+                lower.append(head)
+                upper.append(lca_head_tail)
+                lower.append(tail)
+                upper.append(lca_head_tail)
+            _,_,answer = mst.treepathmaxima(queries=[lower,upper])
+            
+            ind = 0
+            for edge in edges:
+                head, tail, weight = edge
+                weight_T = max(ans[ind], ans[ind+1])
+                if weight>weight_T:
+                    graph3.remove(edge)
+                ind+=2
+            return kkt_mst(graph3)
         else:
             edges = graph.get_edges()
             for edge in edges:
                 head, tail, weight = edge
                 union_find.union(head, tail)
             return union_find, graph
+
+    def getbranchingtree(self):
+        from collections import defaultdict
+        edges = self.get_edges()
+        vertices = list(self.get_vertices())
+            
+        child = [-1]*self.num_vertices
+        sibling = [-1]*self.num_vertices
+        parent = [-1]*self.num_vertices
+        rightmost = [-1]*self.num_vertices
+        weights = [-1]*self.num_vertices
+
+#         print(vertices)
+        for i in range(len(vertices)):
+            vertices[i] = str(vertices[i])+'0'
+#         print(vertices)
+        branchingtree=Graph()
+        indmap = {}
+        rindmap = {}
+        ind=0
+        for vertex in vertices:
+            branchingtree.add_vertex(vertex)
+            indmap[vertex]=ind
+            rindmap[ind] = vertex
+            ind+=1
+
+        num_components3 = self.num_vertices
+        union_find3 = Graph.UnionFind()
+        union_find2 = Graph.UnionFind()
+        mst_edges3 = []
+        workdone=True
+        level = 1
+        for edge in edges:
+                head, tail, weight = edge
+                edges.remove((tail, head, weight))
+        while num_components3 > 1  and workdone:
+            cheapest_edge = {}
+            workdone=False
+            # print(vertices)
+            for vertex in vertices:
+                cheapest_edge[indmap[vertex]] = -1
+            for edge in edges:
+                head, tail, weight = edge
+                set1 = union_find2.find(head)
+                set2 = union_find2.find(tail)
+                if set1 != set2:
+                    workdone=True
+                    # print(head,set1,tail,set2)
+                    if cheapest_edge[set1] == -1 or cheapest_edge[set1][2] > weight:
+                        cheapest_edge[set1] = [head, tail, weight]
+
+                    if cheapest_edge[set2] == -1 or cheapest_edge[set2][2] > weight:
+                        cheapest_edge[set2] = [head, tail, weight]
+            # print ('ce', cheapest_edge)
+            ce1 = defaultdict(int)
+            for vertex in cheapest_edge:
+                if cheapest_edge[vertex] != -1:
+                    head,tail,weight = cheapest_edge[vertex]
+                    head = str(head)+'0'
+                    tail = str(tail)+'0'
+                    if ce1[head]==0:
+                        ce1[head] = weight
+                    else:
+                        ce1[head] = min(weight, ce1[head])
+                    if ce1[tail]==0:
+                        ce1[tail] = weight
+                    else:
+                        ce1[tail] = min(weight, ce1[tail])
+                    
+                        
+            for vertex in cheapest_edge:
+                if cheapest_edge[vertex] != -1:
+                    workdone=True
+                    head, tail, weight = cheapest_edge[vertex]
+                    union_find2.union(head, tail)
+                    set1 = union_find3.find(str(head)+'0')
+                    set2 = union_find3.find(str(tail)+'0')
+                    if set1 != set2:
+#                         union_find3.union(str(head)+'0', str(tail)+'0')
+                        mst_edges3.append(cheapest_edge[vertex])
+                        num_components3 = num_components3 - 1
+                        # print (set1, set2, head, 'lol', tail)
+                        if int(set1[-1])==level:
+                            supervertex = set1
+                        elif int(set2[-1])==level:
+                            supervertex = set2
+                        else:
+                            supervertex = min(str(set1), str(set2))+max(str(set1), str(set2)) + str(level)
+#                         set1 = int(set1[:-1])
+#                         set2 = int(set2[:-1])          
+                        head = str(head)+'0'
+                        tail = str(tail)+'0'
+                        union_find3.union(head, supervertex)
+                        union_find3.union(tail, supervertex)
+                        # print (set1, set2, supervertex, 'lol')
+                        if supervertex not in indmap:
+                            ind = branchingtree.num_vertices
+                            indmap[supervertex] = ind
+                            rindmap[ind] = supervertex
+                            parent.append(-1)
+                            sibling.append(-1)
+                            weights.append(-1)
+                            parent[indmap[set1]] = parent[indmap[set2]] = ind
+                            child.append(indmap[set1])
+                            sibling[indmap[set1]] = indmap[set2]
+                            rightmost.append(indmap[set2])
+                            branchingtree.add_vertex(supervertex)
+                            branchingtree.add_edge(set1, supervertex, ce1[head])
+                            branchingtree.add_edge(set2, supervertex, ce1[tail])
+                            weights[indmap[set1]] = ce1[head]
+                            weights[indmap[set2]] = ce1[tail]
+                        else:
+                            ind = indmap[supervertex]
+                            if int(set1[-1])<int(set2[-1]):
+                                sibling[rightmost[ind]] = indmap[set1]
+                                rightmost[ind] = indmap[set1]
+                                parent[indmap[set1]]=ind
+                                weights[indmap[set1]] = ce1[head]
+                                branchingtree.add_edge(set1, supervertex, ce1[head])
+#                                 print(supervertex, branchingtree.get_edges())
+                            else:
+                                sibling[rightmost[ind]] = indmap[set2]
+                                rightmost[ind] = indmap[set2]
+                                parent[indmap[set2]]=ind
+                                weights[indmap[set2]] = ce1[tail]
+                                branchingtree.add_edge(set2, supervertex, ce1[tail])
+#                                 print (rindmap[child[indmap[set1]]])
+#                                 branchingtree.add_edge(rindmap[child[indmap[set1]]], supervertex, min(weights[child[indmap[set1]]], weight))
+            level+=1
+            # print("SEETHISDA", ce1)
+        vertices = list(branchingtree.get_vertices())
+        # print(vertices)
+        for vertex in vertices:
+            if parent[indmap[vertex]]==-1:
+                branchingtree.add_edge('superroot', vertex, -1)
+        return branchingtree, indmap, child, sibling, rightmost, parent, weights
+
+
+    def treepathmaxima(self, queries=None):
+        bt, indmap, child, sibling, rightmost, parent, weights = self.getbranchingtree()
+        bt.precompute_lca('superroot')
+
+        if queries==None:
+            upper = []
+            lower = []
+            edges = self.get_edges()
+            for edge in edges:
+                head, tail, weight = edge
+                lca_head_tail = indmap[bt.lca(str(head)+'0', str(tail)+'0')]
+                lower.append(indmap[str(head)+'0'])
+                upper.append(lca_head_tail)
+                lower.append(indmap[str(tail)+'0'])
+                upper.append(lca_head_tail)
+        else:
+            lower, upper = queries
+
+        global height, depth, D
+        height=0
+        n=len(child)
+        m=len(upper)
+        depth=[0]*n
+        D=[0]*n
+        L=[0]*n
+        Lnext=[0]*m
+        answer=[0]*m
+        median=0
+        P=0
+        weight = weights
+
+        def init(u, d):
+            global height
+            global depth
+            global D
+            depth[u] = d
+            if d>height:
+                height = d
+            i = L[u]
+            while i>=0:
+                D[u]|=1<<depth[upper[i]]
+                i = Lnext[i]
+
+            v = child[u]
+            while v>=0:
+                init(v, d+1)
+                D[u]|=D[v]&~(1<<d)
+                v=sibling[v]
+
+        def down(A, B):
+            return B&(~(A|B)^(A+(A|~B)))
+
+        def visit(v, S):
+            def binary_search(w, S):
+                if S==0:
+                    return 0
+                j=median[S]
+                while (S!=1<<j):
+                    if (weight[P[j]]>w):
+                        S&=~((1<<j)-1)
+                    else:
+                        S&=(1<<j)-1
+                    j=median[S]
+                if (weight[P[j]]>w):
+                    return j
+                else:
+                    return 0
+            P[depth[v]]=v
+            k=binary_search(weight[v],down(D[v],S))
+            S=down(D[v],S&(1<<(k+1)-1)|(1<<depth[v]))
+            i = L[v]
+            while i>=0:
+                answer[i]=P[median[down(1<<depth[upper[i]],S)]];
+                i = Lnext[i]
+            z = child[v]
+            while z>=0:
+                visit(z,S)
+                z = sibling[z]
+
+        def median_table(h):
+            T = [0]*(1<<(h+1))
+            median = [0]*(1<<(h+1))
+
+            def subsets(n,k,p):
+                if n<k:
+                    return p
+                if k==0:
+                    T[p] = 0
+                    return p+1
+                q = subsets(n-1,k-1,p)
+                for i in range(p, q):
+                    T[i]|=1<<(n-1)
+                return subsets(n-1,k,q)
+
+            for s in range(0, h+1):
+                for k in range(0, s+1):
+                    p = subsets(h-s,k,0)
+                    q=subsets(s,k,p)
+                    q=subsets(s,k+1,q)
+                    for i in range(0, p):
+                        b=(1<<s+1)*T[i]+(1<<s)
+                        for j in range(p,q):
+                            median[b+T[j]]=s
+            return median
+
+        L=[-1]*len(L)
+        Lnext=[-1]*len(Lnext)
+        for i in range(m):
+            Lnext[i]=L[lower[i]]
+            L[lower[i]]=i
+        D = [0]*len(D)
+        depth = [0]*n
+        root = 8
+        height=0
+        init(root,0)
+        P=[0]*(height+1)
+        median=median_table(height)
+        visit(root,0)
+        answer = list(map(lambda x: weights[x], answer))
+
+        edges = self.get_edges()
+        i = 0
+        for edge in edges:
+            # print (lower[i], upper[i], lower[i+1], upper[i+1])
+            w_T = max(answer[i], answer[i+1])
+            w = edge[2]
+            if w!=w_T:
+                return False
+    #             print('Not MST')
+    #         print(w, w_T, edge)
+            i+=2
+        return lower, upper, answer
+
 
     def dfs(self, v, p, h):
         # print self.first_visit, v, self.euler_tour
@@ -628,13 +856,14 @@ class Graph:
 
 
 # g = Graph()
-# # g = Graph.build([0, 1, 2, 3], [[0, 1, 1], [0, 2, 1],
-# #                           [0, 3, 1], [1, 2, 1], [2, 3, 1]])
+# g = Graph.build([0, 1, 2, 3], [[0, 1, 1], [0, 2, 1],
+                        #   [0, 3, 1], [1, 2, 1], [2, 3, 1]])
 # g = Graph.build([0, 1, 2, 3, 4, 5], [[0, 1, 1], [0, 2, 1], [3, 4, 1], [3, 5, 1], [-1,0,1], [-1,3,1]])
 # # g = Graph.build(['a', 'b', 'c', 'd'], [['a', 'b', 1], ['a', 'c', 1],
 # #                                        ['a', 'd', 1], ['b', 'c', 1], ['c', 'd', 1]])
 # g.distinct_weight()
 
+# g.myGraphViz()
 
 # # kg = Graph.kruskal_mst(g)
 # # print(kg)
