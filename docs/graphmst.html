@@ -1,0 +1,2869 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.8.1" />
+<title>graphmst API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>graphmst</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from __future__ import annotations
+
+class Graph:
+    &#39;&#39;&#39;
+    Data structure to store graphs (based on adjacency lists)
+    &#39;&#39;&#39;
+
+    def __init__(self):
+
+        # Set number of edges and vertices to 0 since the initial graph is
+        # empty (adjacency list is empty as well) and everything is added
+        # only after initialization
+        self.num_vertices = 0
+        &#39;&#39;&#39;
+        Number of vertices.
+        &#39;&#39;&#39;
+        self.num_edges = 0
+        &#39;&#39;&#39;
+        Number of edges.
+        &#39;&#39;&#39;
+        self.adjacency = {}
+        &#39;&#39;&#39;
+        Dictionary of the form `{tail: {head: weight}}` where `(head, tail, weight)` is an edge in the graph.
+        &#39;&#39;&#39;
+
+        # Used for LCA
+        self.block_size = None
+        self.block_cnt = None
+        self.first_visit = None
+        self.euler_tour = None
+        self.height = None
+        self.log_2 = None
+        self.st = None
+        self.blocks = None
+        self.block_mask = None
+
+        # Used for graph visualization
+        self.layout = None
+        &#39;&#39;&#39;
+        Node positioning algorithms for graph drawing.
+        &#39;&#39;&#39;
+
+
+    def add_vertex(self, vertex):
+        &#39;&#39;&#39;
+        Adds a vertex to the graph.
+
+        `vertex` must be a hashable object
+        &#39;&#39;&#39;
+        if vertex not in self.adjacency:
+            self.adjacency[vertex] = {}
+            self.num_vertices += 1
+
+    def add_edge(self, head, tail, weight):
+        &#39;&#39;&#39;
+        Adds an edge to the graph.
+        
+        `head` and `tail are vertices representing the endpoints of the edge
+        
+        `weight` is the weight of the egde from head to tail
+        &#39;&#39;&#39;
+        # Add the vertices to the graph (if they haven&#39;t already been added)
+        self.add_vertex(head)
+        self.add_vertex(tail)
+
+        # Self edge =&gt; invalid
+        if head == tail:
+            return
+
+        # Since graph is undirected, add both edge and reverse edge
+        self.adjacency[head][tail] = weight
+
+        self.adjacency[tail][head] = weight
+
+    def distinct_weight(self):
+        &#39;&#39;&#39;
+        Makes the weights of all the edges pairwise distinct.
+        &#39;&#39;&#39;
+        edges = self.get_edges()
+        for edge in edges:
+            head, tail, weight = edge
+            edges.remove((tail, head, weight))
+        for i in range(len(edges)):
+            edges[i] = list(edges[i])
+
+        edges.sort(key=lambda e: e[2])
+        for i in range(len(edges)-1):
+            if edges[i][2] &gt;= edges[i+1][2]:
+                edges[i+1][2] = edges[i][2]+1
+        for edge in edges:
+            head, tail, weight = edge
+            self.adjacency[head][tail] = weight
+            self.adjacency[tail][head] = weight
+
+    def __str__(self):
+        &#39;&#39;&#39;
+        String representation of the graph.
+        &#39;&#39;&#39;
+        string = &#39;&#39;
+        for tail in self.adjacency:
+            for head in self.adjacency[tail]:
+                weight = self.adjacency[head][tail]
+                #string += &#34;%d -&gt; %d == %d\n&#34; % (head, tail, weight)
+                string += str(head)+&#39; -&gt; &#39;+str(tail)+&#39; == &#39;+str(weight)+&#39;\n&#39;
+        return string
+
+    def get_edges(self):
+        &#39;&#39;&#39;
+        Returns all edges in the graph.
+        &#39;&#39;&#39;
+        output = []
+        for tail in self.adjacency:
+            for head in self.adjacency[tail]:
+                output.append((tail, head, self.adjacency[head][tail]))
+        return output
+
+    def get_vertices(self):
+        &#39;&#39;&#39;
+        Returns all vertices in the graph.
+        &#39;&#39;&#39;
+        return self.adjacency.keys()
+
+    def adjacent(self, tail, head):
+        &#39;&#39;&#39;
+        Returns True if there is an edge between `head` and `tail`, False otherwise.
+        &#39;&#39;&#39;
+        if tail in self.adjacency:
+            if head in self.adjacency[tail]:
+                return True
+        return False
+
+    def neighbours(self, vertex) -&gt; dict:
+        &#39;&#39;&#39;
+        Returns a list of all vertices that are adjacent to `vertex`.
+        &#39;&#39;&#39;
+        if vertex not in self.adjacency:
+            return []
+        else:
+            return self.adjacency[vertex].keys()
+
+    def remove_edge(self, tail, head):
+        &#39;&#39;&#39;
+        Removes the edge between `tail` and `head` from the graphs.
+        &#39;&#39;&#39;
+        if tail in self.adjacency:
+            if head in self.adjacency[tail]:
+                del self.adjacency[tail][head]
+
+        if head in self.adjacency:
+            if tail in self.adjacency[head]:
+                del self.adjacency[head][tail]
+
+    def remove_vertex(self, vertex):
+        &#39;&#39;&#39;
+        Removes `vertex` (and edges incident on `vertex`) from the graph.
+        &#39;&#39;&#39;
+        if vertex not in self.adjacency:
+            return
+
+        # Delete edges incident on the vertex
+        for tail in self.adjacency[vertex]:
+            del self.adjacency[tail][vertex]
+            del self.adjacency[vertex][tail]
+
+        del self.adjacency[vertex]
+
+    @staticmethod
+    def build(vertices=[], edges=[]) -&gt; Graph:
+        &#39;&#39;&#39;
+        Builds a graph from the given `vertices` and `edges`
+        
+        `vertices` is the list of vertices of he graph
+
+        `edges` is the list of edges of the graph where each edge is a list `[head, tail, weight]`
+        &#39;&#39;&#39;
+        g = Graph()
+        for vertex in vertices:
+            g.add_vertex(vertex)
+        for edge in edges:
+            g.add_edge(*edge)
+        return g
+
+    def myGraphViz(self, isbranchingtree=False, layout=None):
+        &#39;&#39;&#39;
+        Visualizes the graph using [networkx](https://pypi.org/project/networkx/).
+        &#39;&#39;&#39;
+        import matplotlib.pyplot as plt
+        import networkx as nx
+        G = nx.Graph()
+        for head in self.adjacency:
+            for tail in self.adjacency[head]:
+                weight = self.adjacency[head][tail]
+                G.add_edge(head, tail, weight=weight)
+        if layout == None:
+            layout = nx.spring_layout(G, seed=0)
+        if isbranchingtree:
+            layout = nx.circular_layout(G)
+        self.layout = layout
+        nx.draw(G, layout, with_labels=True)
+        labels = nx.get_edge_attributes(G, &#34;weight&#34;)
+        nx.draw_networkx_edge_labels(G, pos=layout, edge_labels=labels)
+        plt.show()
+
+    class UnionFind(object):
+        &#39;&#39;&#39;
+        Disjoint-set data structure to track a set of elements partitioned into multiple disjoint subsets.
+        &#39;&#39;&#39;
+
+        def __init__(self):
+            self.parent = {}
+            &#39;&#39;&#39;
+
+            &#39;&#39;&#39;
+            self.rank = {}
+            &#39;&#39;&#39;
+
+            &#39;&#39;&#39;
+
+        def __len__(self):
+            &#39;&#39;&#39;
+
+            &#39;&#39;&#39;
+            return len(self.parent)
+
+        def make_set(self, item):
+            &#39;&#39;&#39;
+            
+            &#39;&#39;&#39;
+            if item in self.parent:
+                return self.find(item)
+
+            self.parent[item] = item
+            self.rank[item] = 0
+            return item
+
+        def find(self, item):
+            &#39;&#39;&#39;
+
+            &#39;&#39;&#39;
+            if item not in self.parent:
+                return self.make_set(item)
+            if item != self.parent[item]:
+                self.parent[item] = self.find(self.parent[item])
+            return self.parent[item]
+
+        def union(self, item1, item2):
+            &#39;&#39;&#39;
+
+            &#39;&#39;&#39;
+            root1 = self.find(item1)
+            root2 = self.find(item2)
+
+            if root1 == root2:
+                return root1
+            
+            if isinstance(root1, str) and isinstance(root2, str):
+                if len(root1) &gt; len(root2):
+                    self.parent[root2] = root1
+                    return root1
+
+                else:
+                    self.parent[root1] = root2
+                    return root2
+
+            if self.rank[root1] &gt; self.rank[root2]:
+                self.parent[root2] = root1
+                return root1
+
+            if self.rank[root1] &lt; self.rank[root2]:
+                self.parent[root1] = root2
+                return root2
+
+            if self.rank[root1] == self.rank[root2]:
+                self.rank[root1] += 1
+                self.parent[root2] = root1
+                return root1
+
+    def prims_mst(graph) -&gt; Graph:
+        &#39;&#39;&#39;
+        Adjacency matrix based implementation of [https://en.wikipedia.org/wiki/Prim&#39;s_algorithm](Prim&#39;s algorithm).
+
+        Time Complexity: O(_V_&lt;sup&gt;2&lt;/sup&gt;)
+        &#39;&#39;&#39;
+        from collections import defaultdict
+        from math import inf
+        from random import choice
+
+        mst_vertices = set()
+        key = defaultdict(lambda: inf)
+        parent = defaultdict(lambda: None)
+
+        graph_vertices = list(graph.get_vertices())
+        start_vertex = choice(graph_vertices)
+        key[start_vertex] = 0
+        parent[start_vertex] = -1
+
+        while len(mst_vertices) != graph.num_vertices:
+
+            min = inf
+            for vertex in graph_vertices:
+                if key[vertex] &lt; min and vertex not in mst_vertices:
+                    min = key[vertex]
+                    min_key_vertex = vertex
+
+            mst_vertices.add(min_key_vertex)
+            head = min_key_vertex
+
+            for tail in graph.adjacency[head]:
+                if tail not in mst_vertices and graph.adjacency[head][tail] &lt; key[tail]:
+                    key[tail] = graph.adjacency[head][tail]
+                    parent[tail] = head
+
+        mst_edges = []
+
+        for tail in graph_vertices:
+            if parent[tail] != -1:
+                head = parent[tail]
+                edge = [head, tail, graph.adjacency[head][tail]]
+                mst_edges.append(edge)
+
+        mst = Graph.build(edges=mst_edges)
+        return mst
+
+    def kruskal_mst(graph) -&gt; Graph:
+        &#39;&#39;&#39;
+        Implementation of [https://en.wikipedia.org/wiki/Kruskal&#39;s_algorithm](Kruskal&#39;s algorithm).
+
+        Time Complexity: O(_E_ log _E_) 
+        &#39;&#39;&#39;
+        mst_edges = []
+        edges = graph.get_edges()
+        num_vertices = len(graph.get_vertices())
+
+        edges = graph.get_edges()
+        for edge in edges:
+            head, tail, weight = edge
+            edges.remove((tail, head, weight))
+        edges.sort(key=lambda e: e[2])
+
+        union_find = Graph.UnionFind()
+
+        index = 0
+        while index &lt; num_vertices-1:
+            edge = edges[index]
+            [tail, head, value] = edge
+            index += 1
+
+            if union_find.find(head) == union_find.find(tail):
+                continue
+            else:
+                union_find.union(head, tail)
+            mst_edges.append(edge)
+
+        mst = Graph.build(edges=mst_edges)
+        return mst
+
+    def boruvka_step(graph, num_components, union_find, mst_edges) -&gt; (int, int, int):
+        &#39;&#39;&#39;
+        Implementation of Boruvka step
+        Time Complexity: 
+        &#39;&#39;&#39;
+        cheapest_edge = {}
+        for vertex in graph.get_vertices():
+            cheapest_edge[vertex] = -1
+
+        edges = graph.get_edges()
+        for edge in edges:
+            head, tail, weight = edge
+            edges.remove((tail, head, weight))
+        for edge in edges:
+            head, tail, weight = edge
+            set1 = union_find.find(head)
+            set2 = union_find.find(tail)
+            if set1 != set2:
+                if cheapest_edge[set1] == -1 or cheapest_edge[set1][2] &gt; weight:
+                    cheapest_edge[set1] = [head, tail, weight]
+
+                if cheapest_edge[set2] == -1 or cheapest_edge[set2][2] &gt; weight:
+                    cheapest_edge[set2] = [head, tail, weight]
+        for vertex in cheapest_edge:
+            if cheapest_edge[vertex] != -1:
+                head, tail, weight = cheapest_edge[vertex]
+                if union_find.find(head) != union_find.find(tail):
+                    union_find.union(head, tail)
+                    mst_edges.append(cheapest_edge[vertex])
+                    num_components = num_components - 1
+        return num_components, union_find, mst_edges
+
+    def boruvka_mst(graph):
+        &#39;&#39;&#39;
+        Implementation of Boruvka&#39;s algorithm
+        Time Complexity: 
+        &#39;&#39;&#39;
+        num_components = graph.num_vertices
+
+        union_find = Graph.UnionFind()
+        mst_edges = []
+        while num_components &gt; 1:
+            num_components, union_find, mst_edges = Graph.boruvka_step(graph, num_components, union_find, mst_edges)
+
+        mst = Graph.build(edges=mst_edges)
+        return mst
+
+    class BranchingNode:
+        def __init__(self, index, level):
+            self.index = index
+            self.level = 0
+            
+    
+    def kkt_mst(graph, union_find=None, first_call=False):
+        &#39;&#39;&#39;
+        Implementation of KKT Algorithm
+        Time Complexity:
+        &#39;&#39;&#39;
+        from collections import defaultdict
+        from random import random
+        if first_call:
+            union_find = Graph.UnionFind()
+            num_components = graph.num_vertices
+            mst_edges = []
+
+        if graph.num_edges &gt; 1:
+            num_steps_remaining = 2
+            while graph.num_edges &gt; 1 and num_steps_remaining &gt; 0:
+                num_components, union_find, mst_edges = Graph.boruvka_step(
+                    graph, num_components, union_find, mst_edges)
+                num_steps_remaining -= 1
+            edges = graph.get_edges()
+            graph3 = Graph()
+            for edge in edges:
+                head, tail, weight = edge
+                set1 = union_find.find(head)
+                set2 = union_find.find(tail)
+                if set1 != set2:
+                    random_num = random.random()
+                    if random_num &gt; 0.5:
+                        graph3.add_edge(head, tail, weight)
+            num_components, union_find, graph4 = kkt_mst(
+                graph3, union_find, False)
+            graph3_copy = copy(graph3)
+            edges = graph3.get_edges()
+            vertices = graph3.get_vertices()
+
+            branchingtree = graph3.getbranchingtree()
+
+            branchingtree.precomputeLCA(&#39;super root&#39;)
+            mst = Graph.build(edges=mst_edges)
+            lower, upper = [], []
+            for edge in edges:
+                head, tail, weight = edge
+                lca_head_tail = graph3.lca(head, tail)
+                lower.append(head)
+                upper.append(lca_head_tail)
+                lower.append(tail)
+                upper.append(lca_head_tail)
+            _,_,answer = mst.treepathmaxima(queries=[lower,upper])
+            
+            ind = 0
+            for edge in edges:
+                head, tail, weight = edge
+                weight_T = max(ans[ind], ans[ind+1])
+                if weight&gt;weight_T:
+                    graph3.remove(edge)
+                ind+=2
+            return kkt_mst(graph3)
+        else:
+            edges = graph.get_edges()
+            for edge in edges:
+                head, tail, weight = edge
+                union_find.union(head, tail)
+            return union_find, graph
+
+    def getbranchingtree(self):
+        from collections import defaultdict
+        edges = self.get_edges()
+        vertices = list(self.get_vertices())
+            
+        child = [-1]*self.num_vertices
+        sibling = [-1]*self.num_vertices
+        parent = [-1]*self.num_vertices
+        rightmost = [-1]*self.num_vertices
+        weights = [-1]*self.num_vertices
+
+#         print(vertices)
+        for i in range(len(vertices)):
+            vertices[i] = str(vertices[i])+&#39;0&#39;
+#         print(vertices)
+        branchingtree=Graph()
+        indmap = {}
+        rindmap = {}
+        ind=0
+        for vertex in vertices:
+            branchingtree.add_vertex(vertex)
+            indmap[vertex]=ind
+            rindmap[ind] = vertex
+            ind+=1
+
+        num_components3 = self.num_vertices
+        union_find3 = Graph.UnionFind()
+        union_find2 = Graph.UnionFind()
+        mst_edges3 = []
+        workdone=True
+        level = 1
+        for edge in edges:
+                head, tail, weight = edge
+                edges.remove((tail, head, weight))
+        while num_components3 &gt; 1  and workdone:
+            cheapest_edge = {}
+            workdone=False
+            # print(vertices)
+            for vertex in vertices:
+                cheapest_edge[indmap[vertex]] = -1
+            for edge in edges:
+                head, tail, weight = edge
+                set1 = union_find2.find(head)
+                set2 = union_find2.find(tail)
+                if set1 != set2:
+                    workdone=True
+                    # print(head,set1,tail,set2)
+                    if cheapest_edge[set1] == -1 or cheapest_edge[set1][2] &gt; weight:
+                        cheapest_edge[set1] = [head, tail, weight]
+
+                    if cheapest_edge[set2] == -1 or cheapest_edge[set2][2] &gt; weight:
+                        cheapest_edge[set2] = [head, tail, weight]
+            # print (&#39;ce&#39;, cheapest_edge)
+            ce1 = defaultdict(int)
+            for vertex in cheapest_edge:
+                if cheapest_edge[vertex] != -1:
+                    head,tail,weight = cheapest_edge[vertex]
+                    head = str(head)+&#39;0&#39;
+                    tail = str(tail)+&#39;0&#39;
+                    if ce1[head]==0:
+                        ce1[head] = weight
+                    else:
+                        ce1[head] = min(weight, ce1[head])
+                    if ce1[tail]==0:
+                        ce1[tail] = weight
+                    else:
+                        ce1[tail] = min(weight, ce1[tail])
+                    
+                        
+            for vertex in cheapest_edge:
+                if cheapest_edge[vertex] != -1:
+                    workdone=True
+                    head, tail, weight = cheapest_edge[vertex]
+                    union_find2.union(head, tail)
+                    set1 = union_find3.find(str(head)+&#39;0&#39;)
+                    set2 = union_find3.find(str(tail)+&#39;0&#39;)
+                    if set1 != set2:
+#                         union_find3.union(str(head)+&#39;0&#39;, str(tail)+&#39;0&#39;)
+                        mst_edges3.append(cheapest_edge[vertex])
+                        num_components3 = num_components3 - 1
+                        # print (set1, set2, head, &#39;lol&#39;, tail)
+                        if int(set1[-1])==level:
+                            supervertex = set1
+                        elif int(set2[-1])==level:
+                            supervertex = set2
+                        else:
+                            supervertex = min(str(set1), str(set2))+max(str(set1), str(set2)) + str(level)
+#                         set1 = int(set1[:-1])
+#                         set2 = int(set2[:-1])          
+                        head = str(head)+&#39;0&#39;
+                        tail = str(tail)+&#39;0&#39;
+                        union_find3.union(head, supervertex)
+                        union_find3.union(tail, supervertex)
+                        # print (set1, set2, supervertex, &#39;lol&#39;)
+                        if supervertex not in indmap:
+                            ind = branchingtree.num_vertices
+                            indmap[supervertex] = ind
+                            rindmap[ind] = supervertex
+                            parent.append(-1)
+                            sibling.append(-1)
+                            weights.append(-1)
+                            parent[indmap[set1]] = parent[indmap[set2]] = ind
+                            child.append(indmap[set1])
+                            sibling[indmap[set1]] = indmap[set2]
+                            rightmost.append(indmap[set2])
+                            branchingtree.add_vertex(supervertex)
+                            branchingtree.add_edge(set1, supervertex, ce1[head])
+                            branchingtree.add_edge(set2, supervertex, ce1[tail])
+                            weights[indmap[set1]] = ce1[head]
+                            weights[indmap[set2]] = ce1[tail]
+                        else:
+                            ind = indmap[supervertex]
+                            if int(set1[-1])&lt;int(set2[-1]):
+                                sibling[rightmost[ind]] = indmap[set1]
+                                rightmost[ind] = indmap[set1]
+                                parent[indmap[set1]]=ind
+                                weights[indmap[set1]] = ce1[head]
+                                branchingtree.add_edge(set1, supervertex, ce1[head])
+#                                 print(supervertex, branchingtree.get_edges())
+                            else:
+                                sibling[rightmost[ind]] = indmap[set2]
+                                rightmost[ind] = indmap[set2]
+                                parent[indmap[set2]]=ind
+                                weights[indmap[set2]] = ce1[tail]
+                                branchingtree.add_edge(set2, supervertex, ce1[tail])
+#                                 print (rindmap[child[indmap[set1]]])
+#                                 branchingtree.add_edge(rindmap[child[indmap[set1]]], supervertex, min(weights[child[indmap[set1]]], weight))
+            level+=1
+            # print(&#34;SEETHISDA&#34;, ce1)
+        vertices = list(branchingtree.get_vertices())
+        # print(vertices)
+        for vertex in vertices:
+            if parent[indmap[vertex]]==-1:
+                branchingtree.add_edge(&#39;superroot&#39;, vertex, -1)
+        return branchingtree, indmap, child, sibling, rightmost, parent, weights
+
+
+    def treepathmaxima(self, queries=None):
+        bt, indmap, child, sibling, rightmost, parent, weights = self.getbranchingtree()
+        bt.precompute_lca(&#39;superroot&#39;)
+
+        if queries==None:
+            upper = []
+            lower = []
+            edges = self.get_edges()
+            for edge in edges:
+                head, tail, weight = edge
+                lca_head_tail = indmap[bt.lca(str(head)+&#39;0&#39;, str(tail)+&#39;0&#39;)]
+                lower.append(indmap[str(head)+&#39;0&#39;])
+                upper.append(lca_head_tail)
+                lower.append(indmap[str(tail)+&#39;0&#39;])
+                upper.append(lca_head_tail)
+        else:
+            lower, upper = queries
+
+        global height, depth, D
+        height=0
+        n=len(child)
+        m=len(upper)
+        depth=[0]*n
+        D=[0]*n
+        L=[0]*n
+        Lnext=[0]*m
+        answer=[0]*m
+        median=0
+        P=0
+        weight = weights
+
+        def init(u, d):
+            global height
+            global depth
+            global D
+            depth[u] = d
+            if d&gt;height:
+                height = d
+            i = L[u]
+            while i&gt;=0:
+                D[u]|=1&lt;&lt;depth[upper[i]]
+                i = Lnext[i]
+
+            v = child[u]
+            while v&gt;=0:
+                init(v, d+1)
+                D[u]|=D[v]&amp;~(1&lt;&lt;d)
+                v=sibling[v]
+
+        def down(A, B):
+            return B&amp;(~(A|B)^(A+(A|~B)))
+
+        def visit(v, S):
+            def binary_search(w, S):
+                if S==0:
+                    return 0
+                j=median[S]
+                while (S!=1&lt;&lt;j):
+                    if (weight[P[j]]&gt;w):
+                        S&amp;=~((1&lt;&lt;j)-1)
+                    else:
+                        S&amp;=(1&lt;&lt;j)-1
+                    j=median[S]
+                if (weight[P[j]]&gt;w):
+                    return j
+                else:
+                    return 0
+            P[depth[v]]=v
+            k=binary_search(weight[v],down(D[v],S))
+            S=down(D[v],S&amp;(1&lt;&lt;(k+1)-1)|(1&lt;&lt;depth[v]))
+            i = L[v]
+            while i&gt;=0:
+                answer[i]=P[median[down(1&lt;&lt;depth[upper[i]],S)]];
+                i = Lnext[i]
+            z = child[v]
+            while z&gt;=0:
+                visit(z,S)
+                z = sibling[z]
+
+        def median_table(h):
+            T = [0]*(1&lt;&lt;(h+1))
+            median = [0]*(1&lt;&lt;(h+1))
+
+            def subsets(n,k,p):
+                if n&lt;k:
+                    return p
+                if k==0:
+                    T[p] = 0
+                    return p+1
+                q = subsets(n-1,k-1,p)
+                for i in range(p, q):
+                    T[i]|=1&lt;&lt;(n-1)
+                return subsets(n-1,k,q)
+
+            for s in range(0, h+1):
+                for k in range(0, s+1):
+                    p = subsets(h-s,k,0)
+                    q=subsets(s,k,p)
+                    q=subsets(s,k+1,q)
+                    for i in range(0, p):
+                        b=(1&lt;&lt;s+1)*T[i]+(1&lt;&lt;s)
+                        for j in range(p,q):
+                            median[b+T[j]]=s
+            return median
+
+        L=[-1]*len(L)
+        Lnext=[-1]*len(Lnext)
+        for i in range(m):
+            Lnext[i]=L[lower[i]]
+            L[lower[i]]=i
+        D = [0]*len(D)
+        depth = [0]*n
+        root = 8
+        height=0
+        init(root,0)
+        P=[0]*(height+1)
+        median=median_table(height)
+        visit(root,0)
+        answer = list(map(lambda x: weights[x], answer))
+
+        edges = self.get_edges()
+        i = 0
+        for edge in edges:
+            # print (lower[i], upper[i], lower[i+1], upper[i+1])
+            w_T = max(answer[i], answer[i+1])
+            w = edge[2]
+            if w!=w_T:
+                return False
+    #             print(&#39;Not MST&#39;)
+    #         print(w, w_T, edge)
+            i+=2
+        return lower, upper, answer
+
+
+    def dfs(self, v, p, h):
+        # print self.first_visit, v, self.euler_tour
+        self.first_visit[v] = len(self.euler_tour)
+        self.euler_tour.append(v)
+        self.height[v] = h
+        for u in self.adjacency[v]:
+            # print v, p, h, u
+            if u == p:
+                continue
+            self.dfs(u, v, h + 1)
+            self.euler_tour.append(v)
+
+    def min_by_h(self, i, j):
+        return i if self.height[self.euler_tour[i]] &lt; self.height[self.euler_tour[j]] else j
+
+    def precompute_lca(self, root):
+        from collections import defaultdict
+        # reserves from c++ can be omitted when we use python;
+        # capacity is different from size as the latter counts actual items;
+        # single-argument vector constructor adds that many actual items with unspecified value
+
+        n = self.num_vertices
+
+        # get euler tour and indices of first occurrences
+        self.first_visit = defaultdict(lambda: 0)
+        for i in range(n):
+            self.first_visit[i] = -1
+        self.height = defaultdict(lambda: 0)
+        for i in range(n):
+            self.height[i] = 0
+        self.euler_tour = []
+        self.dfs(root, -1, 0)
+
+        # pre-compute all log values
+        m = len(self.euler_tour)
+        self.log_2 = []
+        self.log_2.append(-1)
+        for i in range(1, m + 1):
+            self.log_2.append(self.log_2[i // 2] + 1)
+        self.block_size = max(1, self.log_2[m] // 2)
+        self.block_cnt = (m + self.block_size - 1) // self.block_size
+
+        # pre-compute min. of each block and build sparse table;
+        # integer vectors automatically initialize using zero
+        self.st = []
+        for i in range(self.block_cnt):
+            self.st.append([0] * (self.log_2[self.block_cnt] + 1))
+        b = 0
+        j = 0
+        for i in range(m):
+            if (j == self.block_size):
+                j = 0
+                b += 1
+            if (j == 0 or self.min_by_h(i, self.st[b][0]) == i):
+                self.st[b][0] = i
+            j += 1
+        for l in range(1, self.log_2[self.block_cnt] + 1):
+            for i in range(self.block_cnt):
+                ni = i + (1 &lt;&lt; (l - 1))
+                if (ni &gt;= self.block_cnt):
+                    self.st[i][l] = self.st[i][l - 1]
+                else:
+                    # print self.st, i, l
+                    self.st[i][l] = self.min_by_h(
+                        self.st[i][l - 1], self.st[ni][l - 1])
+
+        # pre-compute mask for each block
+        self.block_mask = [0] * self.block_cnt
+        b = 0
+        j = 0
+        for i in range(0, m):
+            if (j == self.block_size):
+                j = 0
+                b += 1
+            if (j &gt; 0 and (i &gt;= m or self.min_by_h(i - 1, i) == i - 1)):
+                self.block_mask[b] += 1 &lt;&lt; (j - 1)
+            j += 1
+
+        # pre-compute RMQ for each unique block
+        # possibilities = 1 &lt;&lt; (self.block_size - 1)
+        self.blocks = defaultdict(
+            lambda: defaultdict(lambda: defaultdict(lambda: 0)))
+        for b in range(0, self.block_cnt):
+            mask = self.block_mask[b]
+            # print self.blocks, mask, b
+            if len(self.blocks[mask]) != 0:
+                continue
+            # print self.blocks[mask]
+            # self.blocks[mask] = []
+            for i in range(self.block_size):
+                curr_value = [0] * self.block_size
+                # print self.blocks[0]
+                self.blocks[mask][i] = curr_value
+            for l in range(self.block_size):
+                self.blocks[mask][l][l] = l
+                for r in range(l + 1, self.block_size):
+                    self.blocks[mask][l][r] = self.blocks[mask][l][r - 1]
+                    if (b * self.block_size + r &lt; m):
+                        self.blocks[mask][l][r] = self.min_by_h(b * self.block_size + self.blocks[mask][l][r],
+                                                                b * self.block_size + r) - b * self.block_size
+
+    def lca_in_block(self, b, l, r):
+        return self.blocks[self.block_mask[b]][l][r] + b * self.block_size
+
+    def lca(self, v, u):
+        l = self.first_visit[v]
+        r = self.first_visit[u]
+        if (l &gt; r):
+            v1 = l
+            v2 = r
+            l = v2
+            r = v1
+        bl = l // self.block_size
+        br = r // self.block_size
+        if (bl == br):
+            return self.euler_tour[self.lca_in_block(bl, l % self.block_size, r % self.block_size)]
+        ans1 = self.lca_in_block(bl, l % self.block_size, self.block_size - 1)
+        ans2 = self.lca_in_block(br, 0, r % self.block_size)
+        ans = self.min_by_h(ans1, ans2)
+        if (bl + 1 &lt; br):
+            l = self.log_2[br - bl - 1]
+            ans3 = self.st[bl + 1][l]
+            ans4 = self.st[br - (1 &lt;&lt; l)][l]
+            ans = self.min_by_h(ans, self.min_by_h(ans3, ans4))
+        return self.euler_tour[ans]
+    
+
+
+# g = Graph()
+# g = Graph.build([0, 1, 2, 3], [[0, 1, 1], [0, 2, 1],
+                        #   [0, 3, 1], [1, 2, 1], [2, 3, 1]])
+# g = Graph.build([0, 1, 2, 3, 4, 5], [[0, 1, 1], [0, 2, 1], [3, 4, 1], [3, 5, 1], [-1,0,1], [-1,3,1]])
+# # g = Graph.build([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;], [[&#39;a&#39;, &#39;b&#39;, 1], [&#39;a&#39;, &#39;c&#39;, 1],
+# #                                        [&#39;a&#39;, &#39;d&#39;, 1], [&#39;b&#39;, &#39;c&#39;, 1], [&#39;c&#39;, &#39;d&#39;, 1]])
+# g.distinct_weight()
+
+# g.myGraphViz()
+
+# # kg = Graph.kruskal_mst(g)
+# # print(kg)
+# # pg = Graph.prims_mst(g)
+# # print(pg)
+# # bg = Graph.boruvka_mst(g)
+# # print(bg)
+
+# g.precompute_lca(-1)
+# print(g.lca(1,3))</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="graphmst.Graph"><code class="flex name class">
+<span>class <span class="ident">Graph</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Data structure to store graphs (based on adjacency lists)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Graph:
+    &#39;&#39;&#39;
+    Data structure to store graphs (based on adjacency lists)
+    &#39;&#39;&#39;
+
+    def __init__(self):
+
+        # Set number of edges and vertices to 0 since the initial graph is
+        # empty (adjacency list is empty as well) and everything is added
+        # only after initialization
+        self.num_vertices = 0
+        &#39;&#39;&#39;
+        Number of vertices.
+        &#39;&#39;&#39;
+        self.num_edges = 0
+        &#39;&#39;&#39;
+        Number of edges.
+        &#39;&#39;&#39;
+        self.adjacency = {}
+        &#39;&#39;&#39;
+        Dictionary of the form `{tail: {head: weight}}` where `(head, tail, weight)` is an edge in the graph.
+        &#39;&#39;&#39;
+
+        # Used for LCA
+        self.block_size = None
+        self.block_cnt = None
+        self.first_visit = None
+        self.euler_tour = None
+        self.height = None
+        self.log_2 = None
+        self.st = None
+        self.blocks = None
+        self.block_mask = None
+
+        # Used for graph visualization
+        self.layout = None
+        &#39;&#39;&#39;
+        Node positioning algorithms for graph drawing.
+        &#39;&#39;&#39;
+
+
+    def add_vertex(self, vertex):
+        &#39;&#39;&#39;
+        Adds a vertex to the graph.
+
+        `vertex` must be a hashable object
+        &#39;&#39;&#39;
+        if vertex not in self.adjacency:
+            self.adjacency[vertex] = {}
+            self.num_vertices += 1
+
+    def add_edge(self, head, tail, weight):
+        &#39;&#39;&#39;
+        Adds an edge to the graph.
+        
+        `head` and `tail are vertices representing the endpoints of the edge
+        
+        `weight` is the weight of the egde from head to tail
+        &#39;&#39;&#39;
+        # Add the vertices to the graph (if they haven&#39;t already been added)
+        self.add_vertex(head)
+        self.add_vertex(tail)
+
+        # Self edge =&gt; invalid
+        if head == tail:
+            return
+
+        # Since graph is undirected, add both edge and reverse edge
+        self.adjacency[head][tail] = weight
+
+        self.adjacency[tail][head] = weight
+
+    def distinct_weight(self):
+        &#39;&#39;&#39;
+        Makes the weights of all the edges pairwise distinct.
+        &#39;&#39;&#39;
+        edges = self.get_edges()
+        for edge in edges:
+            head, tail, weight = edge
+            edges.remove((tail, head, weight))
+        for i in range(len(edges)):
+            edges[i] = list(edges[i])
+
+        edges.sort(key=lambda e: e[2])
+        for i in range(len(edges)-1):
+            if edges[i][2] &gt;= edges[i+1][2]:
+                edges[i+1][2] = edges[i][2]+1
+        for edge in edges:
+            head, tail, weight = edge
+            self.adjacency[head][tail] = weight
+            self.adjacency[tail][head] = weight
+
+    def __str__(self):
+        &#39;&#39;&#39;
+        String representation of the graph.
+        &#39;&#39;&#39;
+        string = &#39;&#39;
+        for tail in self.adjacency:
+            for head in self.adjacency[tail]:
+                weight = self.adjacency[head][tail]
+                #string += &#34;%d -&gt; %d == %d\n&#34; % (head, tail, weight)
+                string += str(head)+&#39; -&gt; &#39;+str(tail)+&#39; == &#39;+str(weight)+&#39;\n&#39;
+        return string
+
+    def get_edges(self):
+        &#39;&#39;&#39;
+        Returns all edges in the graph.
+        &#39;&#39;&#39;
+        output = []
+        for tail in self.adjacency:
+            for head in self.adjacency[tail]:
+                output.append((tail, head, self.adjacency[head][tail]))
+        return output
+
+    def get_vertices(self):
+        &#39;&#39;&#39;
+        Returns all vertices in the graph.
+        &#39;&#39;&#39;
+        return self.adjacency.keys()
+
+    def adjacent(self, tail, head):
+        &#39;&#39;&#39;
+        Returns True if there is an edge between `head` and `tail`, False otherwise.
+        &#39;&#39;&#39;
+        if tail in self.adjacency:
+            if head in self.adjacency[tail]:
+                return True
+        return False
+
+    def neighbours(self, vertex) -&gt; dict:
+        &#39;&#39;&#39;
+        Returns a list of all vertices that are adjacent to `vertex`.
+        &#39;&#39;&#39;
+        if vertex not in self.adjacency:
+            return []
+        else:
+            return self.adjacency[vertex].keys()
+
+    def remove_edge(self, tail, head):
+        &#39;&#39;&#39;
+        Removes the edge between `tail` and `head` from the graphs.
+        &#39;&#39;&#39;
+        if tail in self.adjacency:
+            if head in self.adjacency[tail]:
+                del self.adjacency[tail][head]
+
+        if head in self.adjacency:
+            if tail in self.adjacency[head]:
+                del self.adjacency[head][tail]
+
+    def remove_vertex(self, vertex):
+        &#39;&#39;&#39;
+        Removes `vertex` (and edges incident on `vertex`) from the graph.
+        &#39;&#39;&#39;
+        if vertex not in self.adjacency:
+            return
+
+        # Delete edges incident on the vertex
+        for tail in self.adjacency[vertex]:
+            del self.adjacency[tail][vertex]
+            del self.adjacency[vertex][tail]
+
+        del self.adjacency[vertex]
+
+    @staticmethod
+    def build(vertices=[], edges=[]) -&gt; Graph:
+        &#39;&#39;&#39;
+        Builds a graph from the given `vertices` and `edges`
+        
+        `vertices` is the list of vertices of he graph
+
+        `edges` is the list of edges of the graph where each edge is a list `[head, tail, weight]`
+        &#39;&#39;&#39;
+        g = Graph()
+        for vertex in vertices:
+            g.add_vertex(vertex)
+        for edge in edges:
+            g.add_edge(*edge)
+        return g
+
+    def myGraphViz(self, isbranchingtree=False, layout=None):
+        &#39;&#39;&#39;
+        Visualizes the graph using [networkx](https://pypi.org/project/networkx/).
+        &#39;&#39;&#39;
+        import matplotlib.pyplot as plt
+        import networkx as nx
+        G = nx.Graph()
+        for head in self.adjacency:
+            for tail in self.adjacency[head]:
+                weight = self.adjacency[head][tail]
+                G.add_edge(head, tail, weight=weight)
+        if layout == None:
+            layout = nx.spring_layout(G, seed=0)
+        if isbranchingtree:
+            layout = nx.circular_layout(G)
+        self.layout = layout
+        nx.draw(G, layout, with_labels=True)
+        labels = nx.get_edge_attributes(G, &#34;weight&#34;)
+        nx.draw_networkx_edge_labels(G, pos=layout, edge_labels=labels)
+        plt.show()
+
+    class UnionFind(object):
+        &#39;&#39;&#39;
+        Disjoint-set data structure to track a set of elements partitioned into multiple disjoint subsets.
+        &#39;&#39;&#39;
+
+        def __init__(self):
+            self.parent = {}
+            &#39;&#39;&#39;
+
+            &#39;&#39;&#39;
+            self.rank = {}
+            &#39;&#39;&#39;
+
+            &#39;&#39;&#39;
+
+        def __len__(self):
+            &#39;&#39;&#39;
+
+            &#39;&#39;&#39;
+            return len(self.parent)
+
+        def make_set(self, item):
+            &#39;&#39;&#39;
+            
+            &#39;&#39;&#39;
+            if item in self.parent:
+                return self.find(item)
+
+            self.parent[item] = item
+            self.rank[item] = 0
+            return item
+
+        def find(self, item):
+            &#39;&#39;&#39;
+
+            &#39;&#39;&#39;
+            if item not in self.parent:
+                return self.make_set(item)
+            if item != self.parent[item]:
+                self.parent[item] = self.find(self.parent[item])
+            return self.parent[item]
+
+        def union(self, item1, item2):
+            &#39;&#39;&#39;
+
+            &#39;&#39;&#39;
+            root1 = self.find(item1)
+            root2 = self.find(item2)
+
+            if root1 == root2:
+                return root1
+            
+            if isinstance(root1, str) and isinstance(root2, str):
+                if len(root1) &gt; len(root2):
+                    self.parent[root2] = root1
+                    return root1
+
+                else:
+                    self.parent[root1] = root2
+                    return root2
+
+            if self.rank[root1] &gt; self.rank[root2]:
+                self.parent[root2] = root1
+                return root1
+
+            if self.rank[root1] &lt; self.rank[root2]:
+                self.parent[root1] = root2
+                return root2
+
+            if self.rank[root1] == self.rank[root2]:
+                self.rank[root1] += 1
+                self.parent[root2] = root1
+                return root1
+
+    def prims_mst(graph) -&gt; Graph:
+        &#39;&#39;&#39;
+        Adjacency matrix based implementation of [https://en.wikipedia.org/wiki/Prim&#39;s_algorithm](Prim&#39;s algorithm).
+
+        Time Complexity: O(_V_&lt;sup&gt;2&lt;/sup&gt;)
+        &#39;&#39;&#39;
+        from collections import defaultdict
+        from math import inf
+        from random import choice
+
+        mst_vertices = set()
+        key = defaultdict(lambda: inf)
+        parent = defaultdict(lambda: None)
+
+        graph_vertices = list(graph.get_vertices())
+        start_vertex = choice(graph_vertices)
+        key[start_vertex] = 0
+        parent[start_vertex] = -1
+
+        while len(mst_vertices) != graph.num_vertices:
+
+            min = inf
+            for vertex in graph_vertices:
+                if key[vertex] &lt; min and vertex not in mst_vertices:
+                    min = key[vertex]
+                    min_key_vertex = vertex
+
+            mst_vertices.add(min_key_vertex)
+            head = min_key_vertex
+
+            for tail in graph.adjacency[head]:
+                if tail not in mst_vertices and graph.adjacency[head][tail] &lt; key[tail]:
+                    key[tail] = graph.adjacency[head][tail]
+                    parent[tail] = head
+
+        mst_edges = []
+
+        for tail in graph_vertices:
+            if parent[tail] != -1:
+                head = parent[tail]
+                edge = [head, tail, graph.adjacency[head][tail]]
+                mst_edges.append(edge)
+
+        mst = Graph.build(edges=mst_edges)
+        return mst
+
+    def kruskal_mst(graph) -&gt; Graph:
+        &#39;&#39;&#39;
+        Implementation of [https://en.wikipedia.org/wiki/Kruskal&#39;s_algorithm](Kruskal&#39;s algorithm).
+
+        Time Complexity: O(_E_ log _E_) 
+        &#39;&#39;&#39;
+        mst_edges = []
+        edges = graph.get_edges()
+        num_vertices = len(graph.get_vertices())
+
+        edges = graph.get_edges()
+        for edge in edges:
+            head, tail, weight = edge
+            edges.remove((tail, head, weight))
+        edges.sort(key=lambda e: e[2])
+
+        union_find = Graph.UnionFind()
+
+        index = 0
+        while index &lt; num_vertices-1:
+            edge = edges[index]
+            [tail, head, value] = edge
+            index += 1
+
+            if union_find.find(head) == union_find.find(tail):
+                continue
+            else:
+                union_find.union(head, tail)
+            mst_edges.append(edge)
+
+        mst = Graph.build(edges=mst_edges)
+        return mst
+
+    def boruvka_step(graph, num_components, union_find, mst_edges) -&gt; (int, int, int):
+        &#39;&#39;&#39;
+        Implementation of Boruvka step
+        Time Complexity: 
+        &#39;&#39;&#39;
+        cheapest_edge = {}
+        for vertex in graph.get_vertices():
+            cheapest_edge[vertex] = -1
+
+        edges = graph.get_edges()
+        for edge in edges:
+            head, tail, weight = edge
+            edges.remove((tail, head, weight))
+        for edge in edges:
+            head, tail, weight = edge
+            set1 = union_find.find(head)
+            set2 = union_find.find(tail)
+            if set1 != set2:
+                if cheapest_edge[set1] == -1 or cheapest_edge[set1][2] &gt; weight:
+                    cheapest_edge[set1] = [head, tail, weight]
+
+                if cheapest_edge[set2] == -1 or cheapest_edge[set2][2] &gt; weight:
+                    cheapest_edge[set2] = [head, tail, weight]
+        for vertex in cheapest_edge:
+            if cheapest_edge[vertex] != -1:
+                head, tail, weight = cheapest_edge[vertex]
+                if union_find.find(head) != union_find.find(tail):
+                    union_find.union(head, tail)
+                    mst_edges.append(cheapest_edge[vertex])
+                    num_components = num_components - 1
+        return num_components, union_find, mst_edges
+
+    def boruvka_mst(graph):
+        &#39;&#39;&#39;
+        Implementation of Boruvka&#39;s algorithm
+        Time Complexity: 
+        &#39;&#39;&#39;
+        num_components = graph.num_vertices
+
+        union_find = Graph.UnionFind()
+        mst_edges = []
+        while num_components &gt; 1:
+            num_components, union_find, mst_edges = Graph.boruvka_step(graph, num_components, union_find, mst_edges)
+
+        mst = Graph.build(edges=mst_edges)
+        return mst
+
+    class BranchingNode:
+        def __init__(self, index, level):
+            self.index = index
+            self.level = 0
+            
+    
+    def kkt_mst(graph, union_find=None, first_call=False):
+        &#39;&#39;&#39;
+        Implementation of KKT Algorithm
+        Time Complexity:
+        &#39;&#39;&#39;
+        from collections import defaultdict
+        from random import random
+        if first_call:
+            union_find = Graph.UnionFind()
+            num_components = graph.num_vertices
+            mst_edges = []
+
+        if graph.num_edges &gt; 1:
+            num_steps_remaining = 2
+            while graph.num_edges &gt; 1 and num_steps_remaining &gt; 0:
+                num_components, union_find, mst_edges = Graph.boruvka_step(
+                    graph, num_components, union_find, mst_edges)
+                num_steps_remaining -= 1
+            edges = graph.get_edges()
+            graph3 = Graph()
+            for edge in edges:
+                head, tail, weight = edge
+                set1 = union_find.find(head)
+                set2 = union_find.find(tail)
+                if set1 != set2:
+                    random_num = random.random()
+                    if random_num &gt; 0.5:
+                        graph3.add_edge(head, tail, weight)
+            num_components, union_find, graph4 = kkt_mst(
+                graph3, union_find, False)
+            graph3_copy = copy(graph3)
+            edges = graph3.get_edges()
+            vertices = graph3.get_vertices()
+
+            branchingtree = graph3.getbranchingtree()
+
+            branchingtree.precomputeLCA(&#39;super root&#39;)
+            mst = Graph.build(edges=mst_edges)
+            lower, upper = [], []
+            for edge in edges:
+                head, tail, weight = edge
+                lca_head_tail = graph3.lca(head, tail)
+                lower.append(head)
+                upper.append(lca_head_tail)
+                lower.append(tail)
+                upper.append(lca_head_tail)
+            _,_,answer = mst.treepathmaxima(queries=[lower,upper])
+            
+            ind = 0
+            for edge in edges:
+                head, tail, weight = edge
+                weight_T = max(ans[ind], ans[ind+1])
+                if weight&gt;weight_T:
+                    graph3.remove(edge)
+                ind+=2
+            return kkt_mst(graph3)
+        else:
+            edges = graph.get_edges()
+            for edge in edges:
+                head, tail, weight = edge
+                union_find.union(head, tail)
+            return union_find, graph
+
+    def getbranchingtree(self):
+        from collections import defaultdict
+        edges = self.get_edges()
+        vertices = list(self.get_vertices())
+            
+        child = [-1]*self.num_vertices
+        sibling = [-1]*self.num_vertices
+        parent = [-1]*self.num_vertices
+        rightmost = [-1]*self.num_vertices
+        weights = [-1]*self.num_vertices
+
+#         print(vertices)
+        for i in range(len(vertices)):
+            vertices[i] = str(vertices[i])+&#39;0&#39;
+#         print(vertices)
+        branchingtree=Graph()
+        indmap = {}
+        rindmap = {}
+        ind=0
+        for vertex in vertices:
+            branchingtree.add_vertex(vertex)
+            indmap[vertex]=ind
+            rindmap[ind] = vertex
+            ind+=1
+
+        num_components3 = self.num_vertices
+        union_find3 = Graph.UnionFind()
+        union_find2 = Graph.UnionFind()
+        mst_edges3 = []
+        workdone=True
+        level = 1
+        for edge in edges:
+                head, tail, weight = edge
+                edges.remove((tail, head, weight))
+        while num_components3 &gt; 1  and workdone:
+            cheapest_edge = {}
+            workdone=False
+            # print(vertices)
+            for vertex in vertices:
+                cheapest_edge[indmap[vertex]] = -1
+            for edge in edges:
+                head, tail, weight = edge
+                set1 = union_find2.find(head)
+                set2 = union_find2.find(tail)
+                if set1 != set2:
+                    workdone=True
+                    # print(head,set1,tail,set2)
+                    if cheapest_edge[set1] == -1 or cheapest_edge[set1][2] &gt; weight:
+                        cheapest_edge[set1] = [head, tail, weight]
+
+                    if cheapest_edge[set2] == -1 or cheapest_edge[set2][2] &gt; weight:
+                        cheapest_edge[set2] = [head, tail, weight]
+            # print (&#39;ce&#39;, cheapest_edge)
+            ce1 = defaultdict(int)
+            for vertex in cheapest_edge:
+                if cheapest_edge[vertex] != -1:
+                    head,tail,weight = cheapest_edge[vertex]
+                    head = str(head)+&#39;0&#39;
+                    tail = str(tail)+&#39;0&#39;
+                    if ce1[head]==0:
+                        ce1[head] = weight
+                    else:
+                        ce1[head] = min(weight, ce1[head])
+                    if ce1[tail]==0:
+                        ce1[tail] = weight
+                    else:
+                        ce1[tail] = min(weight, ce1[tail])
+                    
+                        
+            for vertex in cheapest_edge:
+                if cheapest_edge[vertex] != -1:
+                    workdone=True
+                    head, tail, weight = cheapest_edge[vertex]
+                    union_find2.union(head, tail)
+                    set1 = union_find3.find(str(head)+&#39;0&#39;)
+                    set2 = union_find3.find(str(tail)+&#39;0&#39;)
+                    if set1 != set2:
+#                         union_find3.union(str(head)+&#39;0&#39;, str(tail)+&#39;0&#39;)
+                        mst_edges3.append(cheapest_edge[vertex])
+                        num_components3 = num_components3 - 1
+                        # print (set1, set2, head, &#39;lol&#39;, tail)
+                        if int(set1[-1])==level:
+                            supervertex = set1
+                        elif int(set2[-1])==level:
+                            supervertex = set2
+                        else:
+                            supervertex = min(str(set1), str(set2))+max(str(set1), str(set2)) + str(level)
+#                         set1 = int(set1[:-1])
+#                         set2 = int(set2[:-1])          
+                        head = str(head)+&#39;0&#39;
+                        tail = str(tail)+&#39;0&#39;
+                        union_find3.union(head, supervertex)
+                        union_find3.union(tail, supervertex)
+                        # print (set1, set2, supervertex, &#39;lol&#39;)
+                        if supervertex not in indmap:
+                            ind = branchingtree.num_vertices
+                            indmap[supervertex] = ind
+                            rindmap[ind] = supervertex
+                            parent.append(-1)
+                            sibling.append(-1)
+                            weights.append(-1)
+                            parent[indmap[set1]] = parent[indmap[set2]] = ind
+                            child.append(indmap[set1])
+                            sibling[indmap[set1]] = indmap[set2]
+                            rightmost.append(indmap[set2])
+                            branchingtree.add_vertex(supervertex)
+                            branchingtree.add_edge(set1, supervertex, ce1[head])
+                            branchingtree.add_edge(set2, supervertex, ce1[tail])
+                            weights[indmap[set1]] = ce1[head]
+                            weights[indmap[set2]] = ce1[tail]
+                        else:
+                            ind = indmap[supervertex]
+                            if int(set1[-1])&lt;int(set2[-1]):
+                                sibling[rightmost[ind]] = indmap[set1]
+                                rightmost[ind] = indmap[set1]
+                                parent[indmap[set1]]=ind
+                                weights[indmap[set1]] = ce1[head]
+                                branchingtree.add_edge(set1, supervertex, ce1[head])
+#                                 print(supervertex, branchingtree.get_edges())
+                            else:
+                                sibling[rightmost[ind]] = indmap[set2]
+                                rightmost[ind] = indmap[set2]
+                                parent[indmap[set2]]=ind
+                                weights[indmap[set2]] = ce1[tail]
+                                branchingtree.add_edge(set2, supervertex, ce1[tail])
+#                                 print (rindmap[child[indmap[set1]]])
+#                                 branchingtree.add_edge(rindmap[child[indmap[set1]]], supervertex, min(weights[child[indmap[set1]]], weight))
+            level+=1
+            # print(&#34;SEETHISDA&#34;, ce1)
+        vertices = list(branchingtree.get_vertices())
+        # print(vertices)
+        for vertex in vertices:
+            if parent[indmap[vertex]]==-1:
+                branchingtree.add_edge(&#39;superroot&#39;, vertex, -1)
+        return branchingtree, indmap, child, sibling, rightmost, parent, weights
+
+
+    def treepathmaxima(self, queries=None):
+        bt, indmap, child, sibling, rightmost, parent, weights = self.getbranchingtree()
+        bt.precompute_lca(&#39;superroot&#39;)
+
+        if queries==None:
+            upper = []
+            lower = []
+            edges = self.get_edges()
+            for edge in edges:
+                head, tail, weight = edge
+                lca_head_tail = indmap[bt.lca(str(head)+&#39;0&#39;, str(tail)+&#39;0&#39;)]
+                lower.append(indmap[str(head)+&#39;0&#39;])
+                upper.append(lca_head_tail)
+                lower.append(indmap[str(tail)+&#39;0&#39;])
+                upper.append(lca_head_tail)
+        else:
+            lower, upper = queries
+
+        global height, depth, D
+        height=0
+        n=len(child)
+        m=len(upper)
+        depth=[0]*n
+        D=[0]*n
+        L=[0]*n
+        Lnext=[0]*m
+        answer=[0]*m
+        median=0
+        P=0
+        weight = weights
+
+        def init(u, d):
+            global height
+            global depth
+            global D
+            depth[u] = d
+            if d&gt;height:
+                height = d
+            i = L[u]
+            while i&gt;=0:
+                D[u]|=1&lt;&lt;depth[upper[i]]
+                i = Lnext[i]
+
+            v = child[u]
+            while v&gt;=0:
+                init(v, d+1)
+                D[u]|=D[v]&amp;~(1&lt;&lt;d)
+                v=sibling[v]
+
+        def down(A, B):
+            return B&amp;(~(A|B)^(A+(A|~B)))
+
+        def visit(v, S):
+            def binary_search(w, S):
+                if S==0:
+                    return 0
+                j=median[S]
+                while (S!=1&lt;&lt;j):
+                    if (weight[P[j]]&gt;w):
+                        S&amp;=~((1&lt;&lt;j)-1)
+                    else:
+                        S&amp;=(1&lt;&lt;j)-1
+                    j=median[S]
+                if (weight[P[j]]&gt;w):
+                    return j
+                else:
+                    return 0
+            P[depth[v]]=v
+            k=binary_search(weight[v],down(D[v],S))
+            S=down(D[v],S&amp;(1&lt;&lt;(k+1)-1)|(1&lt;&lt;depth[v]))
+            i = L[v]
+            while i&gt;=0:
+                answer[i]=P[median[down(1&lt;&lt;depth[upper[i]],S)]];
+                i = Lnext[i]
+            z = child[v]
+            while z&gt;=0:
+                visit(z,S)
+                z = sibling[z]
+
+        def median_table(h):
+            T = [0]*(1&lt;&lt;(h+1))
+            median = [0]*(1&lt;&lt;(h+1))
+
+            def subsets(n,k,p):
+                if n&lt;k:
+                    return p
+                if k==0:
+                    T[p] = 0
+                    return p+1
+                q = subsets(n-1,k-1,p)
+                for i in range(p, q):
+                    T[i]|=1&lt;&lt;(n-1)
+                return subsets(n-1,k,q)
+
+            for s in range(0, h+1):
+                for k in range(0, s+1):
+                    p = subsets(h-s,k,0)
+                    q=subsets(s,k,p)
+                    q=subsets(s,k+1,q)
+                    for i in range(0, p):
+                        b=(1&lt;&lt;s+1)*T[i]+(1&lt;&lt;s)
+                        for j in range(p,q):
+                            median[b+T[j]]=s
+            return median
+
+        L=[-1]*len(L)
+        Lnext=[-1]*len(Lnext)
+        for i in range(m):
+            Lnext[i]=L[lower[i]]
+            L[lower[i]]=i
+        D = [0]*len(D)
+        depth = [0]*n
+        root = 8
+        height=0
+        init(root,0)
+        P=[0]*(height+1)
+        median=median_table(height)
+        visit(root,0)
+        answer = list(map(lambda x: weights[x], answer))
+
+        edges = self.get_edges()
+        i = 0
+        for edge in edges:
+            # print (lower[i], upper[i], lower[i+1], upper[i+1])
+            w_T = max(answer[i], answer[i+1])
+            w = edge[2]
+            if w!=w_T:
+                return False
+    #             print(&#39;Not MST&#39;)
+    #         print(w, w_T, edge)
+            i+=2
+        return lower, upper, answer
+
+
+    def dfs(self, v, p, h):
+        # print self.first_visit, v, self.euler_tour
+        self.first_visit[v] = len(self.euler_tour)
+        self.euler_tour.append(v)
+        self.height[v] = h
+        for u in self.adjacency[v]:
+            # print v, p, h, u
+            if u == p:
+                continue
+            self.dfs(u, v, h + 1)
+            self.euler_tour.append(v)
+
+    def min_by_h(self, i, j):
+        return i if self.height[self.euler_tour[i]] &lt; self.height[self.euler_tour[j]] else j
+
+    def precompute_lca(self, root):
+        from collections import defaultdict
+        # reserves from c++ can be omitted when we use python;
+        # capacity is different from size as the latter counts actual items;
+        # single-argument vector constructor adds that many actual items with unspecified value
+
+        n = self.num_vertices
+
+        # get euler tour and indices of first occurrences
+        self.first_visit = defaultdict(lambda: 0)
+        for i in range(n):
+            self.first_visit[i] = -1
+        self.height = defaultdict(lambda: 0)
+        for i in range(n):
+            self.height[i] = 0
+        self.euler_tour = []
+        self.dfs(root, -1, 0)
+
+        # pre-compute all log values
+        m = len(self.euler_tour)
+        self.log_2 = []
+        self.log_2.append(-1)
+        for i in range(1, m + 1):
+            self.log_2.append(self.log_2[i // 2] + 1)
+        self.block_size = max(1, self.log_2[m] // 2)
+        self.block_cnt = (m + self.block_size - 1) // self.block_size
+
+        # pre-compute min. of each block and build sparse table;
+        # integer vectors automatically initialize using zero
+        self.st = []
+        for i in range(self.block_cnt):
+            self.st.append([0] * (self.log_2[self.block_cnt] + 1))
+        b = 0
+        j = 0
+        for i in range(m):
+            if (j == self.block_size):
+                j = 0
+                b += 1
+            if (j == 0 or self.min_by_h(i, self.st[b][0]) == i):
+                self.st[b][0] = i
+            j += 1
+        for l in range(1, self.log_2[self.block_cnt] + 1):
+            for i in range(self.block_cnt):
+                ni = i + (1 &lt;&lt; (l - 1))
+                if (ni &gt;= self.block_cnt):
+                    self.st[i][l] = self.st[i][l - 1]
+                else:
+                    # print self.st, i, l
+                    self.st[i][l] = self.min_by_h(
+                        self.st[i][l - 1], self.st[ni][l - 1])
+
+        # pre-compute mask for each block
+        self.block_mask = [0] * self.block_cnt
+        b = 0
+        j = 0
+        for i in range(0, m):
+            if (j == self.block_size):
+                j = 0
+                b += 1
+            if (j &gt; 0 and (i &gt;= m or self.min_by_h(i - 1, i) == i - 1)):
+                self.block_mask[b] += 1 &lt;&lt; (j - 1)
+            j += 1
+
+        # pre-compute RMQ for each unique block
+        # possibilities = 1 &lt;&lt; (self.block_size - 1)
+        self.blocks = defaultdict(
+            lambda: defaultdict(lambda: defaultdict(lambda: 0)))
+        for b in range(0, self.block_cnt):
+            mask = self.block_mask[b]
+            # print self.blocks, mask, b
+            if len(self.blocks[mask]) != 0:
+                continue
+            # print self.blocks[mask]
+            # self.blocks[mask] = []
+            for i in range(self.block_size):
+                curr_value = [0] * self.block_size
+                # print self.blocks[0]
+                self.blocks[mask][i] = curr_value
+            for l in range(self.block_size):
+                self.blocks[mask][l][l] = l
+                for r in range(l + 1, self.block_size):
+                    self.blocks[mask][l][r] = self.blocks[mask][l][r - 1]
+                    if (b * self.block_size + r &lt; m):
+                        self.blocks[mask][l][r] = self.min_by_h(b * self.block_size + self.blocks[mask][l][r],
+                                                                b * self.block_size + r) - b * self.block_size
+
+    def lca_in_block(self, b, l, r):
+        return self.blocks[self.block_mask[b]][l][r] + b * self.block_size
+
+    def lca(self, v, u):
+        l = self.first_visit[v]
+        r = self.first_visit[u]
+        if (l &gt; r):
+            v1 = l
+            v2 = r
+            l = v2
+            r = v1
+        bl = l // self.block_size
+        br = r // self.block_size
+        if (bl == br):
+            return self.euler_tour[self.lca_in_block(bl, l % self.block_size, r % self.block_size)]
+        ans1 = self.lca_in_block(bl, l % self.block_size, self.block_size - 1)
+        ans2 = self.lca_in_block(br, 0, r % self.block_size)
+        ans = self.min_by_h(ans1, ans2)
+        if (bl + 1 &lt; br):
+            l = self.log_2[br - bl - 1]
+            ans3 = self.st[bl + 1][l]
+            ans4 = self.st[br - (1 &lt;&lt; l)][l]
+            ans = self.min_by_h(ans, self.min_by_h(ans3, ans4))
+        return self.euler_tour[ans]</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="graphmst.Graph.BranchingNode"><code class="name">var <span class="ident">BranchingNode</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="graphmst.Graph.UnionFind"><code class="name">var <span class="ident">UnionFind</span></code></dt>
+<dd>
+<div class="desc"><p>Disjoint-set data structure to track a set of elements partitioned into multiple disjoint subsets.</p></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="graphmst.Graph.build"><code class="name flex">
+<span>def <span class="ident">build</span></span>(<span>vertices=[], edges=[]) -> <a title="graphmst.Graph" href="#graphmst.Graph">Graph</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Builds a graph from the given <code>vertices</code> and <code>edges</code></p>
+<p><code>vertices</code> is the list of vertices of he graph</p>
+<p><code>edges</code> is the list of edges of the graph where each edge is a list <code>[head, tail, weight]</code></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def build(vertices=[], edges=[]) -&gt; Graph:
+    &#39;&#39;&#39;
+    Builds a graph from the given `vertices` and `edges`
+    
+    `vertices` is the list of vertices of he graph
+
+    `edges` is the list of edges of the graph where each edge is a list `[head, tail, weight]`
+    &#39;&#39;&#39;
+    g = Graph()
+    for vertex in vertices:
+        g.add_vertex(vertex)
+    for edge in edges:
+        g.add_edge(*edge)
+    return g</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="graphmst.Graph.adjacency"><code class="name">var <span class="ident">adjacency</span></code></dt>
+<dd>
+<div class="desc"><p>Dictionary of the form <code>{tail: {head: weight}}</code> where <code>(head, tail, weight)</code> is an edge in the graph.</p></div>
+</dd>
+<dt id="graphmst.Graph.layout"><code class="name">var <span class="ident">layout</span></code></dt>
+<dd>
+<div class="desc"><p>Node positioning algorithms for graph drawing.</p></div>
+</dd>
+<dt id="graphmst.Graph.num_edges"><code class="name">var <span class="ident">num_edges</span></code></dt>
+<dd>
+<div class="desc"><p>Number of edges.</p></div>
+</dd>
+<dt id="graphmst.Graph.num_vertices"><code class="name">var <span class="ident">num_vertices</span></code></dt>
+<dd>
+<div class="desc"><p>Number of vertices.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="graphmst.Graph.add_edge"><code class="name flex">
+<span>def <span class="ident">add_edge</span></span>(<span>self, head, tail, weight)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Adds an edge to the graph.</p>
+<p><code>head</code> and `tail are vertices representing the endpoints of the edge</p>
+<p><code>weight</code> is the weight of the egde from head to tail</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_edge(self, head, tail, weight):
+    &#39;&#39;&#39;
+    Adds an edge to the graph.
+    
+    `head` and `tail are vertices representing the endpoints of the edge
+    
+    `weight` is the weight of the egde from head to tail
+    &#39;&#39;&#39;
+    # Add the vertices to the graph (if they haven&#39;t already been added)
+    self.add_vertex(head)
+    self.add_vertex(tail)
+
+    # Self edge =&gt; invalid
+    if head == tail:
+        return
+
+    # Since graph is undirected, add both edge and reverse edge
+    self.adjacency[head][tail] = weight
+
+    self.adjacency[tail][head] = weight</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.add_vertex"><code class="name flex">
+<span>def <span class="ident">add_vertex</span></span>(<span>self, vertex)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Adds a vertex to the graph.</p>
+<p><code>vertex</code> must be a hashable object</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_vertex(self, vertex):
+    &#39;&#39;&#39;
+    Adds a vertex to the graph.
+
+    `vertex` must be a hashable object
+    &#39;&#39;&#39;
+    if vertex not in self.adjacency:
+        self.adjacency[vertex] = {}
+        self.num_vertices += 1</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.adjacent"><code class="name flex">
+<span>def <span class="ident">adjacent</span></span>(<span>self, tail, head)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns True if there is an edge between <code>head</code> and <code>tail</code>, False otherwise.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def adjacent(self, tail, head):
+    &#39;&#39;&#39;
+    Returns True if there is an edge between `head` and `tail`, False otherwise.
+    &#39;&#39;&#39;
+    if tail in self.adjacency:
+        if head in self.adjacency[tail]:
+            return True
+    return False</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.boruvka_mst"><code class="name flex">
+<span>def <span class="ident">boruvka_mst</span></span>(<span>graph)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Implementation of Boruvka's algorithm
+Time Complexity:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def boruvka_mst(graph):
+    &#39;&#39;&#39;
+    Implementation of Boruvka&#39;s algorithm
+    Time Complexity: 
+    &#39;&#39;&#39;
+    num_components = graph.num_vertices
+
+    union_find = Graph.UnionFind()
+    mst_edges = []
+    while num_components &gt; 1:
+        num_components, union_find, mst_edges = Graph.boruvka_step(graph, num_components, union_find, mst_edges)
+
+    mst = Graph.build(edges=mst_edges)
+    return mst</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.boruvka_step"><code class="name flex">
+<span>def <span class="ident">boruvka_step</span></span>(<span>graph, num_components, union_find, mst_edges) -> '(int, int, int)'</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Implementation of Boruvka step
+Time Complexity:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def boruvka_step(graph, num_components, union_find, mst_edges) -&gt; (int, int, int):
+    &#39;&#39;&#39;
+    Implementation of Boruvka step
+    Time Complexity: 
+    &#39;&#39;&#39;
+    cheapest_edge = {}
+    for vertex in graph.get_vertices():
+        cheapest_edge[vertex] = -1
+
+    edges = graph.get_edges()
+    for edge in edges:
+        head, tail, weight = edge
+        edges.remove((tail, head, weight))
+    for edge in edges:
+        head, tail, weight = edge
+        set1 = union_find.find(head)
+        set2 = union_find.find(tail)
+        if set1 != set2:
+            if cheapest_edge[set1] == -1 or cheapest_edge[set1][2] &gt; weight:
+                cheapest_edge[set1] = [head, tail, weight]
+
+            if cheapest_edge[set2] == -1 or cheapest_edge[set2][2] &gt; weight:
+                cheapest_edge[set2] = [head, tail, weight]
+    for vertex in cheapest_edge:
+        if cheapest_edge[vertex] != -1:
+            head, tail, weight = cheapest_edge[vertex]
+            if union_find.find(head) != union_find.find(tail):
+                union_find.union(head, tail)
+                mst_edges.append(cheapest_edge[vertex])
+                num_components = num_components - 1
+    return num_components, union_find, mst_edges</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.dfs"><code class="name flex">
+<span>def <span class="ident">dfs</span></span>(<span>self, v, p, h)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dfs(self, v, p, h):
+    # print self.first_visit, v, self.euler_tour
+    self.first_visit[v] = len(self.euler_tour)
+    self.euler_tour.append(v)
+    self.height[v] = h
+    for u in self.adjacency[v]:
+        # print v, p, h, u
+        if u == p:
+            continue
+        self.dfs(u, v, h + 1)
+        self.euler_tour.append(v)</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.distinct_weight"><code class="name flex">
+<span>def <span class="ident">distinct_weight</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Makes the weights of all the edges pairwise distinct.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def distinct_weight(self):
+    &#39;&#39;&#39;
+    Makes the weights of all the edges pairwise distinct.
+    &#39;&#39;&#39;
+    edges = self.get_edges()
+    for edge in edges:
+        head, tail, weight = edge
+        edges.remove((tail, head, weight))
+    for i in range(len(edges)):
+        edges[i] = list(edges[i])
+
+    edges.sort(key=lambda e: e[2])
+    for i in range(len(edges)-1):
+        if edges[i][2] &gt;= edges[i+1][2]:
+            edges[i+1][2] = edges[i][2]+1
+    for edge in edges:
+        head, tail, weight = edge
+        self.adjacency[head][tail] = weight
+        self.adjacency[tail][head] = weight</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.get_edges"><code class="name flex">
+<span>def <span class="ident">get_edges</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns all edges in the graph.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_edges(self):
+    &#39;&#39;&#39;
+    Returns all edges in the graph.
+    &#39;&#39;&#39;
+    output = []
+    for tail in self.adjacency:
+        for head in self.adjacency[tail]:
+            output.append((tail, head, self.adjacency[head][tail]))
+    return output</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.get_vertices"><code class="name flex">
+<span>def <span class="ident">get_vertices</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns all vertices in the graph.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_vertices(self):
+    &#39;&#39;&#39;
+    Returns all vertices in the graph.
+    &#39;&#39;&#39;
+    return self.adjacency.keys()</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.getbranchingtree"><code class="name flex">
+<span>def <span class="ident">getbranchingtree</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">    def getbranchingtree(self):
+        from collections import defaultdict
+        edges = self.get_edges()
+        vertices = list(self.get_vertices())
+            
+        child = [-1]*self.num_vertices
+        sibling = [-1]*self.num_vertices
+        parent = [-1]*self.num_vertices
+        rightmost = [-1]*self.num_vertices
+        weights = [-1]*self.num_vertices
+
+#         print(vertices)
+        for i in range(len(vertices)):
+            vertices[i] = str(vertices[i])+&#39;0&#39;
+#         print(vertices)
+        branchingtree=Graph()
+        indmap = {}
+        rindmap = {}
+        ind=0
+        for vertex in vertices:
+            branchingtree.add_vertex(vertex)
+            indmap[vertex]=ind
+            rindmap[ind] = vertex
+            ind+=1
+
+        num_components3 = self.num_vertices
+        union_find3 = Graph.UnionFind()
+        union_find2 = Graph.UnionFind()
+        mst_edges3 = []
+        workdone=True
+        level = 1
+        for edge in edges:
+                head, tail, weight = edge
+                edges.remove((tail, head, weight))
+        while num_components3 &gt; 1  and workdone:
+            cheapest_edge = {}
+            workdone=False
+            # print(vertices)
+            for vertex in vertices:
+                cheapest_edge[indmap[vertex]] = -1
+            for edge in edges:
+                head, tail, weight = edge
+                set1 = union_find2.find(head)
+                set2 = union_find2.find(tail)
+                if set1 != set2:
+                    workdone=True
+                    # print(head,set1,tail,set2)
+                    if cheapest_edge[set1] == -1 or cheapest_edge[set1][2] &gt; weight:
+                        cheapest_edge[set1] = [head, tail, weight]
+
+                    if cheapest_edge[set2] == -1 or cheapest_edge[set2][2] &gt; weight:
+                        cheapest_edge[set2] = [head, tail, weight]
+            # print (&#39;ce&#39;, cheapest_edge)
+            ce1 = defaultdict(int)
+            for vertex in cheapest_edge:
+                if cheapest_edge[vertex] != -1:
+                    head,tail,weight = cheapest_edge[vertex]
+                    head = str(head)+&#39;0&#39;
+                    tail = str(tail)+&#39;0&#39;
+                    if ce1[head]==0:
+                        ce1[head] = weight
+                    else:
+                        ce1[head] = min(weight, ce1[head])
+                    if ce1[tail]==0:
+                        ce1[tail] = weight
+                    else:
+                        ce1[tail] = min(weight, ce1[tail])
+                    
+                        
+            for vertex in cheapest_edge:
+                if cheapest_edge[vertex] != -1:
+                    workdone=True
+                    head, tail, weight = cheapest_edge[vertex]
+                    union_find2.union(head, tail)
+                    set1 = union_find3.find(str(head)+&#39;0&#39;)
+                    set2 = union_find3.find(str(tail)+&#39;0&#39;)
+                    if set1 != set2:
+#                         union_find3.union(str(head)+&#39;0&#39;, str(tail)+&#39;0&#39;)
+                        mst_edges3.append(cheapest_edge[vertex])
+                        num_components3 = num_components3 - 1
+                        # print (set1, set2, head, &#39;lol&#39;, tail)
+                        if int(set1[-1])==level:
+                            supervertex = set1
+                        elif int(set2[-1])==level:
+                            supervertex = set2
+                        else:
+                            supervertex = min(str(set1), str(set2))+max(str(set1), str(set2)) + str(level)
+#                         set1 = int(set1[:-1])
+#                         set2 = int(set2[:-1])          
+                        head = str(head)+&#39;0&#39;
+                        tail = str(tail)+&#39;0&#39;
+                        union_find3.union(head, supervertex)
+                        union_find3.union(tail, supervertex)
+                        # print (set1, set2, supervertex, &#39;lol&#39;)
+                        if supervertex not in indmap:
+                            ind = branchingtree.num_vertices
+                            indmap[supervertex] = ind
+                            rindmap[ind] = supervertex
+                            parent.append(-1)
+                            sibling.append(-1)
+                            weights.append(-1)
+                            parent[indmap[set1]] = parent[indmap[set2]] = ind
+                            child.append(indmap[set1])
+                            sibling[indmap[set1]] = indmap[set2]
+                            rightmost.append(indmap[set2])
+                            branchingtree.add_vertex(supervertex)
+                            branchingtree.add_edge(set1, supervertex, ce1[head])
+                            branchingtree.add_edge(set2, supervertex, ce1[tail])
+                            weights[indmap[set1]] = ce1[head]
+                            weights[indmap[set2]] = ce1[tail]
+                        else:
+                            ind = indmap[supervertex]
+                            if int(set1[-1])&lt;int(set2[-1]):
+                                sibling[rightmost[ind]] = indmap[set1]
+                                rightmost[ind] = indmap[set1]
+                                parent[indmap[set1]]=ind
+                                weights[indmap[set1]] = ce1[head]
+                                branchingtree.add_edge(set1, supervertex, ce1[head])
+#                                 print(supervertex, branchingtree.get_edges())
+                            else:
+                                sibling[rightmost[ind]] = indmap[set2]
+                                rightmost[ind] = indmap[set2]
+                                parent[indmap[set2]]=ind
+                                weights[indmap[set2]] = ce1[tail]
+                                branchingtree.add_edge(set2, supervertex, ce1[tail])
+#                                 print (rindmap[child[indmap[set1]]])
+#                                 branchingtree.add_edge(rindmap[child[indmap[set1]]], supervertex, min(weights[child[indmap[set1]]], weight))
+            level+=1
+            # print(&#34;SEETHISDA&#34;, ce1)
+        vertices = list(branchingtree.get_vertices())
+        # print(vertices)
+        for vertex in vertices:
+            if parent[indmap[vertex]]==-1:
+                branchingtree.add_edge(&#39;superroot&#39;, vertex, -1)
+        return branchingtree, indmap, child, sibling, rightmost, parent, weights</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.kkt_mst"><code class="name flex">
+<span>def <span class="ident">kkt_mst</span></span>(<span>graph, union_find=None, first_call=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Implementation of KKT Algorithm
+Time Complexity:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def kkt_mst(graph, union_find=None, first_call=False):
+    &#39;&#39;&#39;
+    Implementation of KKT Algorithm
+    Time Complexity:
+    &#39;&#39;&#39;
+    from collections import defaultdict
+    from random import random
+    if first_call:
+        union_find = Graph.UnionFind()
+        num_components = graph.num_vertices
+        mst_edges = []
+
+    if graph.num_edges &gt; 1:
+        num_steps_remaining = 2
+        while graph.num_edges &gt; 1 and num_steps_remaining &gt; 0:
+            num_components, union_find, mst_edges = Graph.boruvka_step(
+                graph, num_components, union_find, mst_edges)
+            num_steps_remaining -= 1
+        edges = graph.get_edges()
+        graph3 = Graph()
+        for edge in edges:
+            head, tail, weight = edge
+            set1 = union_find.find(head)
+            set2 = union_find.find(tail)
+            if set1 != set2:
+                random_num = random.random()
+                if random_num &gt; 0.5:
+                    graph3.add_edge(head, tail, weight)
+        num_components, union_find, graph4 = kkt_mst(
+            graph3, union_find, False)
+        graph3_copy = copy(graph3)
+        edges = graph3.get_edges()
+        vertices = graph3.get_vertices()
+
+        branchingtree = graph3.getbranchingtree()
+
+        branchingtree.precomputeLCA(&#39;super root&#39;)
+        mst = Graph.build(edges=mst_edges)
+        lower, upper = [], []
+        for edge in edges:
+            head, tail, weight = edge
+            lca_head_tail = graph3.lca(head, tail)
+            lower.append(head)
+            upper.append(lca_head_tail)
+            lower.append(tail)
+            upper.append(lca_head_tail)
+        _,_,answer = mst.treepathmaxima(queries=[lower,upper])
+        
+        ind = 0
+        for edge in edges:
+            head, tail, weight = edge
+            weight_T = max(ans[ind], ans[ind+1])
+            if weight&gt;weight_T:
+                graph3.remove(edge)
+            ind+=2
+        return kkt_mst(graph3)
+    else:
+        edges = graph.get_edges()
+        for edge in edges:
+            head, tail, weight = edge
+            union_find.union(head, tail)
+        return union_find, graph</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.kruskal_mst"><code class="name flex">
+<span>def <span class="ident">kruskal_mst</span></span>(<span>graph) -> <a title="graphmst.Graph" href="#graphmst.Graph">Graph</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Implementation of <a href="Kruskal's&gt; algorithm">&lt;https://en.wikipedia.org/wiki/Kruskal's_algorithm</a>.</p>
+<p>Time Complexity: O(<em>E</em> log <em>E</em>)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def kruskal_mst(graph) -&gt; Graph:
+    &#39;&#39;&#39;
+    Implementation of [https://en.wikipedia.org/wiki/Kruskal&#39;s_algorithm](Kruskal&#39;s algorithm).
+
+    Time Complexity: O(_E_ log _E_) 
+    &#39;&#39;&#39;
+    mst_edges = []
+    edges = graph.get_edges()
+    num_vertices = len(graph.get_vertices())
+
+    edges = graph.get_edges()
+    for edge in edges:
+        head, tail, weight = edge
+        edges.remove((tail, head, weight))
+    edges.sort(key=lambda e: e[2])
+
+    union_find = Graph.UnionFind()
+
+    index = 0
+    while index &lt; num_vertices-1:
+        edge = edges[index]
+        [tail, head, value] = edge
+        index += 1
+
+        if union_find.find(head) == union_find.find(tail):
+            continue
+        else:
+            union_find.union(head, tail)
+        mst_edges.append(edge)
+
+    mst = Graph.build(edges=mst_edges)
+    return mst</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.lca"><code class="name flex">
+<span>def <span class="ident">lca</span></span>(<span>self, v, u)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def lca(self, v, u):
+    l = self.first_visit[v]
+    r = self.first_visit[u]
+    if (l &gt; r):
+        v1 = l
+        v2 = r
+        l = v2
+        r = v1
+    bl = l // self.block_size
+    br = r // self.block_size
+    if (bl == br):
+        return self.euler_tour[self.lca_in_block(bl, l % self.block_size, r % self.block_size)]
+    ans1 = self.lca_in_block(bl, l % self.block_size, self.block_size - 1)
+    ans2 = self.lca_in_block(br, 0, r % self.block_size)
+    ans = self.min_by_h(ans1, ans2)
+    if (bl + 1 &lt; br):
+        l = self.log_2[br - bl - 1]
+        ans3 = self.st[bl + 1][l]
+        ans4 = self.st[br - (1 &lt;&lt; l)][l]
+        ans = self.min_by_h(ans, self.min_by_h(ans3, ans4))
+    return self.euler_tour[ans]</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.lca_in_block"><code class="name flex">
+<span>def <span class="ident">lca_in_block</span></span>(<span>self, b, l, r)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def lca_in_block(self, b, l, r):
+    return self.blocks[self.block_mask[b]][l][r] + b * self.block_size</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.min_by_h"><code class="name flex">
+<span>def <span class="ident">min_by_h</span></span>(<span>self, i, j)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def min_by_h(self, i, j):
+    return i if self.height[self.euler_tour[i]] &lt; self.height[self.euler_tour[j]] else j</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.myGraphViz"><code class="name flex">
+<span>def <span class="ident">myGraphViz</span></span>(<span>self, isbranchingtree=False, layout=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Visualizes the graph using <a href="https://pypi.org/project/networkx/">networkx</a>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def myGraphViz(self, isbranchingtree=False, layout=None):
+    &#39;&#39;&#39;
+    Visualizes the graph using [networkx](https://pypi.org/project/networkx/).
+    &#39;&#39;&#39;
+    import matplotlib.pyplot as plt
+    import networkx as nx
+    G = nx.Graph()
+    for head in self.adjacency:
+        for tail in self.adjacency[head]:
+            weight = self.adjacency[head][tail]
+            G.add_edge(head, tail, weight=weight)
+    if layout == None:
+        layout = nx.spring_layout(G, seed=0)
+    if isbranchingtree:
+        layout = nx.circular_layout(G)
+    self.layout = layout
+    nx.draw(G, layout, with_labels=True)
+    labels = nx.get_edge_attributes(G, &#34;weight&#34;)
+    nx.draw_networkx_edge_labels(G, pos=layout, edge_labels=labels)
+    plt.show()</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.neighbours"><code class="name flex">
+<span>def <span class="ident">neighbours</span></span>(<span>self, vertex) -> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a list of all vertices that are adjacent to <code>vertex</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def neighbours(self, vertex) -&gt; dict:
+    &#39;&#39;&#39;
+    Returns a list of all vertices that are adjacent to `vertex`.
+    &#39;&#39;&#39;
+    if vertex not in self.adjacency:
+        return []
+    else:
+        return self.adjacency[vertex].keys()</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.precompute_lca"><code class="name flex">
+<span>def <span class="ident">precompute_lca</span></span>(<span>self, root)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def precompute_lca(self, root):
+    from collections import defaultdict
+    # reserves from c++ can be omitted when we use python;
+    # capacity is different from size as the latter counts actual items;
+    # single-argument vector constructor adds that many actual items with unspecified value
+
+    n = self.num_vertices
+
+    # get euler tour and indices of first occurrences
+    self.first_visit = defaultdict(lambda: 0)
+    for i in range(n):
+        self.first_visit[i] = -1
+    self.height = defaultdict(lambda: 0)
+    for i in range(n):
+        self.height[i] = 0
+    self.euler_tour = []
+    self.dfs(root, -1, 0)
+
+    # pre-compute all log values
+    m = len(self.euler_tour)
+    self.log_2 = []
+    self.log_2.append(-1)
+    for i in range(1, m + 1):
+        self.log_2.append(self.log_2[i // 2] + 1)
+    self.block_size = max(1, self.log_2[m] // 2)
+    self.block_cnt = (m + self.block_size - 1) // self.block_size
+
+    # pre-compute min. of each block and build sparse table;
+    # integer vectors automatically initialize using zero
+    self.st = []
+    for i in range(self.block_cnt):
+        self.st.append([0] * (self.log_2[self.block_cnt] + 1))
+    b = 0
+    j = 0
+    for i in range(m):
+        if (j == self.block_size):
+            j = 0
+            b += 1
+        if (j == 0 or self.min_by_h(i, self.st[b][0]) == i):
+            self.st[b][0] = i
+        j += 1
+    for l in range(1, self.log_2[self.block_cnt] + 1):
+        for i in range(self.block_cnt):
+            ni = i + (1 &lt;&lt; (l - 1))
+            if (ni &gt;= self.block_cnt):
+                self.st[i][l] = self.st[i][l - 1]
+            else:
+                # print self.st, i, l
+                self.st[i][l] = self.min_by_h(
+                    self.st[i][l - 1], self.st[ni][l - 1])
+
+    # pre-compute mask for each block
+    self.block_mask = [0] * self.block_cnt
+    b = 0
+    j = 0
+    for i in range(0, m):
+        if (j == self.block_size):
+            j = 0
+            b += 1
+        if (j &gt; 0 and (i &gt;= m or self.min_by_h(i - 1, i) == i - 1)):
+            self.block_mask[b] += 1 &lt;&lt; (j - 1)
+        j += 1
+
+    # pre-compute RMQ for each unique block
+    # possibilities = 1 &lt;&lt; (self.block_size - 1)
+    self.blocks = defaultdict(
+        lambda: defaultdict(lambda: defaultdict(lambda: 0)))
+    for b in range(0, self.block_cnt):
+        mask = self.block_mask[b]
+        # print self.blocks, mask, b
+        if len(self.blocks[mask]) != 0:
+            continue
+        # print self.blocks[mask]
+        # self.blocks[mask] = []
+        for i in range(self.block_size):
+            curr_value = [0] * self.block_size
+            # print self.blocks[0]
+            self.blocks[mask][i] = curr_value
+        for l in range(self.block_size):
+            self.blocks[mask][l][l] = l
+            for r in range(l + 1, self.block_size):
+                self.blocks[mask][l][r] = self.blocks[mask][l][r - 1]
+                if (b * self.block_size + r &lt; m):
+                    self.blocks[mask][l][r] = self.min_by_h(b * self.block_size + self.blocks[mask][l][r],
+                                                            b * self.block_size + r) - b * self.block_size</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.prims_mst"><code class="name flex">
+<span>def <span class="ident">prims_mst</span></span>(<span>graph) -> <a title="graphmst.Graph" href="#graphmst.Graph">Graph</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Adjacency matrix based implementation of <a href="Prim's&gt; algorithm">&lt;https://en.wikipedia.org/wiki/Prim's_algorithm</a>.</p>
+<p>Time Complexity: O(<em>V</em><sup>2</sup>)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prims_mst(graph) -&gt; Graph:
+    &#39;&#39;&#39;
+    Adjacency matrix based implementation of [https://en.wikipedia.org/wiki/Prim&#39;s_algorithm](Prim&#39;s algorithm).
+
+    Time Complexity: O(_V_&lt;sup&gt;2&lt;/sup&gt;)
+    &#39;&#39;&#39;
+    from collections import defaultdict
+    from math import inf
+    from random import choice
+
+    mst_vertices = set()
+    key = defaultdict(lambda: inf)
+    parent = defaultdict(lambda: None)
+
+    graph_vertices = list(graph.get_vertices())
+    start_vertex = choice(graph_vertices)
+    key[start_vertex] = 0
+    parent[start_vertex] = -1
+
+    while len(mst_vertices) != graph.num_vertices:
+
+        min = inf
+        for vertex in graph_vertices:
+            if key[vertex] &lt; min and vertex not in mst_vertices:
+                min = key[vertex]
+                min_key_vertex = vertex
+
+        mst_vertices.add(min_key_vertex)
+        head = min_key_vertex
+
+        for tail in graph.adjacency[head]:
+            if tail not in mst_vertices and graph.adjacency[head][tail] &lt; key[tail]:
+                key[tail] = graph.adjacency[head][tail]
+                parent[tail] = head
+
+    mst_edges = []
+
+    for tail in graph_vertices:
+        if parent[tail] != -1:
+            head = parent[tail]
+            edge = [head, tail, graph.adjacency[head][tail]]
+            mst_edges.append(edge)
+
+    mst = Graph.build(edges=mst_edges)
+    return mst</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.remove_edge"><code class="name flex">
+<span>def <span class="ident">remove_edge</span></span>(<span>self, tail, head)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Removes the edge between <code>tail</code> and <code>head</code> from the graphs.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remove_edge(self, tail, head):
+    &#39;&#39;&#39;
+    Removes the edge between `tail` and `head` from the graphs.
+    &#39;&#39;&#39;
+    if tail in self.adjacency:
+        if head in self.adjacency[tail]:
+            del self.adjacency[tail][head]
+
+    if head in self.adjacency:
+        if tail in self.adjacency[head]:
+            del self.adjacency[head][tail]</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.remove_vertex"><code class="name flex">
+<span>def <span class="ident">remove_vertex</span></span>(<span>self, vertex)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Removes <code>vertex</code> (and edges incident on <code>vertex</code>) from the graph.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remove_vertex(self, vertex):
+    &#39;&#39;&#39;
+    Removes `vertex` (and edges incident on `vertex`) from the graph.
+    &#39;&#39;&#39;
+    if vertex not in self.adjacency:
+        return
+
+    # Delete edges incident on the vertex
+    for tail in self.adjacency[vertex]:
+        del self.adjacency[tail][vertex]
+        del self.adjacency[vertex][tail]
+
+    del self.adjacency[vertex]</code></pre>
+</details>
+</dd>
+<dt id="graphmst.Graph.treepathmaxima"><code class="name flex">
+<span>def <span class="ident">treepathmaxima</span></span>(<span>self, queries=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def treepathmaxima(self, queries=None):
+    bt, indmap, child, sibling, rightmost, parent, weights = self.getbranchingtree()
+    bt.precompute_lca(&#39;superroot&#39;)
+
+    if queries==None:
+        upper = []
+        lower = []
+        edges = self.get_edges()
+        for edge in edges:
+            head, tail, weight = edge
+            lca_head_tail = indmap[bt.lca(str(head)+&#39;0&#39;, str(tail)+&#39;0&#39;)]
+            lower.append(indmap[str(head)+&#39;0&#39;])
+            upper.append(lca_head_tail)
+            lower.append(indmap[str(tail)+&#39;0&#39;])
+            upper.append(lca_head_tail)
+    else:
+        lower, upper = queries
+
+    global height, depth, D
+    height=0
+    n=len(child)
+    m=len(upper)
+    depth=[0]*n
+    D=[0]*n
+    L=[0]*n
+    Lnext=[0]*m
+    answer=[0]*m
+    median=0
+    P=0
+    weight = weights
+
+    def init(u, d):
+        global height
+        global depth
+        global D
+        depth[u] = d
+        if d&gt;height:
+            height = d
+        i = L[u]
+        while i&gt;=0:
+            D[u]|=1&lt;&lt;depth[upper[i]]
+            i = Lnext[i]
+
+        v = child[u]
+        while v&gt;=0:
+            init(v, d+1)
+            D[u]|=D[v]&amp;~(1&lt;&lt;d)
+            v=sibling[v]
+
+    def down(A, B):
+        return B&amp;(~(A|B)^(A+(A|~B)))
+
+    def visit(v, S):
+        def binary_search(w, S):
+            if S==0:
+                return 0
+            j=median[S]
+            while (S!=1&lt;&lt;j):
+                if (weight[P[j]]&gt;w):
+                    S&amp;=~((1&lt;&lt;j)-1)
+                else:
+                    S&amp;=(1&lt;&lt;j)-1
+                j=median[S]
+            if (weight[P[j]]&gt;w):
+                return j
+            else:
+                return 0
+        P[depth[v]]=v
+        k=binary_search(weight[v],down(D[v],S))
+        S=down(D[v],S&amp;(1&lt;&lt;(k+1)-1)|(1&lt;&lt;depth[v]))
+        i = L[v]
+        while i&gt;=0:
+            answer[i]=P[median[down(1&lt;&lt;depth[upper[i]],S)]];
+            i = Lnext[i]
+        z = child[v]
+        while z&gt;=0:
+            visit(z,S)
+            z = sibling[z]
+
+    def median_table(h):
+        T = [0]*(1&lt;&lt;(h+1))
+        median = [0]*(1&lt;&lt;(h+1))
+
+        def subsets(n,k,p):
+            if n&lt;k:
+                return p
+            if k==0:
+                T[p] = 0
+                return p+1
+            q = subsets(n-1,k-1,p)
+            for i in range(p, q):
+                T[i]|=1&lt;&lt;(n-1)
+            return subsets(n-1,k,q)
+
+        for s in range(0, h+1):
+            for k in range(0, s+1):
+                p = subsets(h-s,k,0)
+                q=subsets(s,k,p)
+                q=subsets(s,k+1,q)
+                for i in range(0, p):
+                    b=(1&lt;&lt;s+1)*T[i]+(1&lt;&lt;s)
+                    for j in range(p,q):
+                        median[b+T[j]]=s
+        return median
+
+    L=[-1]*len(L)
+    Lnext=[-1]*len(Lnext)
+    for i in range(m):
+        Lnext[i]=L[lower[i]]
+        L[lower[i]]=i
+    D = [0]*len(D)
+    depth = [0]*n
+    root = 8
+    height=0
+    init(root,0)
+    P=[0]*(height+1)
+    median=median_table(height)
+    visit(root,0)
+    answer = list(map(lambda x: weights[x], answer))
+
+    edges = self.get_edges()
+    i = 0
+    for edge in edges:
+        # print (lower[i], upper[i], lower[i+1], upper[i+1])
+        w_T = max(answer[i], answer[i+1])
+        w = edge[2]
+        if w!=w_T:
+            return False
+#             print(&#39;Not MST&#39;)
+#         print(w, w_T, edge)
+        i+=2
+    return lower, upper, answer</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="graphmst.Graph" href="#graphmst.Graph">Graph</a></code></h4>
+<ul class="two-column">
+<li><code><a title="graphmst.Graph.BranchingNode" href="#graphmst.Graph.BranchingNode">BranchingNode</a></code></li>
+<li><code><a title="graphmst.Graph.UnionFind" href="#graphmst.Graph.UnionFind">UnionFind</a></code></li>
+<li><code><a title="graphmst.Graph.add_edge" href="#graphmst.Graph.add_edge">add_edge</a></code></li>
+<li><code><a title="graphmst.Graph.add_vertex" href="#graphmst.Graph.add_vertex">add_vertex</a></code></li>
+<li><code><a title="graphmst.Graph.adjacency" href="#graphmst.Graph.adjacency">adjacency</a></code></li>
+<li><code><a title="graphmst.Graph.adjacent" href="#graphmst.Graph.adjacent">adjacent</a></code></li>
+<li><code><a title="graphmst.Graph.boruvka_mst" href="#graphmst.Graph.boruvka_mst">boruvka_mst</a></code></li>
+<li><code><a title="graphmst.Graph.boruvka_step" href="#graphmst.Graph.boruvka_step">boruvka_step</a></code></li>
+<li><code><a title="graphmst.Graph.build" href="#graphmst.Graph.build">build</a></code></li>
+<li><code><a title="graphmst.Graph.dfs" href="#graphmst.Graph.dfs">dfs</a></code></li>
+<li><code><a title="graphmst.Graph.distinct_weight" href="#graphmst.Graph.distinct_weight">distinct_weight</a></code></li>
+<li><code><a title="graphmst.Graph.get_edges" href="#graphmst.Graph.get_edges">get_edges</a></code></li>
+<li><code><a title="graphmst.Graph.get_vertices" href="#graphmst.Graph.get_vertices">get_vertices</a></code></li>
+<li><code><a title="graphmst.Graph.getbranchingtree" href="#graphmst.Graph.getbranchingtree">getbranchingtree</a></code></li>
+<li><code><a title="graphmst.Graph.kkt_mst" href="#graphmst.Graph.kkt_mst">kkt_mst</a></code></li>
+<li><code><a title="graphmst.Graph.kruskal_mst" href="#graphmst.Graph.kruskal_mst">kruskal_mst</a></code></li>
+<li><code><a title="graphmst.Graph.layout" href="#graphmst.Graph.layout">layout</a></code></li>
+<li><code><a title="graphmst.Graph.lca" href="#graphmst.Graph.lca">lca</a></code></li>
+<li><code><a title="graphmst.Graph.lca_in_block" href="#graphmst.Graph.lca_in_block">lca_in_block</a></code></li>
+<li><code><a title="graphmst.Graph.min_by_h" href="#graphmst.Graph.min_by_h">min_by_h</a></code></li>
+<li><code><a title="graphmst.Graph.myGraphViz" href="#graphmst.Graph.myGraphViz">myGraphViz</a></code></li>
+<li><code><a title="graphmst.Graph.neighbours" href="#graphmst.Graph.neighbours">neighbours</a></code></li>
+<li><code><a title="graphmst.Graph.num_edges" href="#graphmst.Graph.num_edges">num_edges</a></code></li>
+<li><code><a title="graphmst.Graph.num_vertices" href="#graphmst.Graph.num_vertices">num_vertices</a></code></li>
+<li><code><a title="graphmst.Graph.precompute_lca" href="#graphmst.Graph.precompute_lca">precompute_lca</a></code></li>
+<li><code><a title="graphmst.Graph.prims_mst" href="#graphmst.Graph.prims_mst">prims_mst</a></code></li>
+<li><code><a title="graphmst.Graph.remove_edge" href="#graphmst.Graph.remove_edge">remove_edge</a></code></li>
+<li><code><a title="graphmst.Graph.remove_vertex" href="#graphmst.Graph.remove_vertex">remove_vertex</a></code></li>
+<li><code><a title="graphmst.Graph.treepathmaxima" href="#graphmst.Graph.treepathmaxima">treepathmaxima</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.8.1</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

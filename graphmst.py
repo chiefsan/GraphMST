@@ -1,14 +1,8 @@
+from __future__ import annotations
+
 class Graph:
     '''
     Data structure to store graphs (based on adjacency lists)
-    Data Members
-    ------------
-    num_vertices : int, number of vertices
-    num_edges : int, number of edges
-    adjacency : dict, {tail: {head: weight}} where   (head, tail, weight)
-        is an edge in the graph
-    incident_vertices : {head: {tails}} where (head, tail, weight)
-        is an edge in the graph
     '''
 
     def __init__(self):
@@ -17,9 +11,19 @@ class Graph:
         # empty (adjacency list is empty as well) and everything is added
         # only after initialization
         self.num_vertices = 0
+        '''
+        Number of vertices.
+        '''
         self.num_edges = 0
-
+        '''
+        Number of edges.
+        '''
         self.adjacency = {}
+        '''
+        Dictionary of the form `{tail: {head: weight}}` where `(head, tail, weight)` is an edge in the graph.
+        '''
+
+        # Used for LCA
         self.block_size = None
         self.block_cnt = None
         self.first_visit = None
@@ -30,15 +34,18 @@ class Graph:
         self.blocks = None
         self.block_mask = None
 
+        # Used for graph visualization
         self.layout = None
+        '''
+        Node positioning algorithms for graph drawing.
+        '''
 
 
     def add_vertex(self, vertex):
         '''
-        Adds a vertex to the graph
-        Parameters
-        ----------
-        vertex : hashable object
+        Adds a vertex to the graph.
+
+        `vertex` must be a hashable object
         '''
         if vertex not in self.adjacency:
             self.adjacency[vertex] = {}
@@ -46,12 +53,11 @@ class Graph:
 
     def add_edge(self, head, tail, weight):
         '''
-        Adds an edge to the graph
-        Parameters
-        ----------
-        head : vertex
-        tail : vertex
-        weight : float, weight of the egde from head to tail
+        Adds an edge to the graph.
+        
+        `head` and `tail are vertices representing the endpoints of the edge
+        
+        `weight` is the weight of the egde from head to tail
         '''
         # Add the vertices to the graph (if they haven't already been added)
         self.add_vertex(head)
@@ -67,6 +73,9 @@ class Graph:
         self.adjacency[tail][head] = weight
 
     def distinct_weight(self):
+        '''
+        Makes the weights of all the edges pairwise distinct.
+        '''
         edges = self.get_edges()
         for edge in edges:
             head, tail, weight = edge
@@ -85,7 +94,7 @@ class Graph:
 
     def __str__(self):
         '''
-        Returns string representation of the graph
+        String representation of the graph.
         '''
         string = ''
         for tail in self.adjacency:
@@ -97,7 +106,7 @@ class Graph:
 
     def get_edges(self):
         '''
-        Returna all edges in the graph
+        Returns all edges in the graph.
         '''
         output = []
         for tail in self.adjacency:
@@ -107,31 +116,22 @@ class Graph:
 
     def get_vertices(self):
         '''
-        Returns all vertices in the graph
+        Returns all vertices in the graph.
         '''
         return self.adjacency.keys()
 
     def adjacent(self, tail, head):
         '''
-        Returns True if there is an edge between head and tail,
-            False otherwise
-        Parameters
-        ---------
-        tail : vertex
-        head : vertex
+        Returns True if there is an edge between `head` and `tail`, False otherwise.
         '''
         if tail in self.adjacency:
             if head in self.adjacency[tail]:
                 return True
         return False
 
-    def neighbours(self, vertex):
+    def neighbours(self, vertex) -> dict:
         '''
-        Returns a list of all tails such that there is an
-            edge between vertex and tail
-        Parameters
-        ---------
-        vertex : vertex
+        Returns a list of all vertices that are adjacent to `vertex`.
         '''
         if vertex not in self.adjacency:
             return []
@@ -140,11 +140,7 @@ class Graph:
 
     def remove_edge(self, tail, head):
         '''
-        Removes an edge from the graphs
-        Parameters
-        ---------
-        tail : vertex
-        head : vertex
+        Removes the edge between `tail` and `head` from the graphs.
         '''
         if tail in self.adjacency:
             if head in self.adjacency[tail]:
@@ -156,10 +152,7 @@ class Graph:
 
     def remove_vertex(self, vertex):
         '''
-        Removes a vertex (and edges incident on the vertex) from the graph
-        Parameters
-        ---------
-        vertex : vertex
+        Removes `vertex` (and edges incident on `vertex`) from the graph.
         '''
         if vertex not in self.adjacency:
             return
@@ -172,13 +165,13 @@ class Graph:
         del self.adjacency[vertex]
 
     @staticmethod
-    def build(vertices=[], edges=[]):
+    def build(vertices=[], edges=[]) -> Graph:
         '''
-        Builds a graph from the given set of vertices and edges
-        Parameters
-        ----------
-        vertices : list of vertices where each element is a vertex
-        edges : list of edges where each edge is a list [head, tail, weight]
+        Builds a graph from the given `vertices` and `edges`
+        
+        `vertices` is the list of vertices of he graph
+
+        `edges` is the list of edges of the graph where each edge is a list `[head, tail, weight]`
         '''
         g = Graph()
         for vertex in vertices:
@@ -189,7 +182,7 @@ class Graph:
 
     def myGraphViz(self, isbranchingtree=False, layout=None):
         '''
-        Visualizes the graph using networkx
+        Visualizes the graph using [networkx](https://pypi.org/project/networkx/).
         '''
         import matplotlib.pyplot as plt
         import networkx as nx
@@ -210,16 +203,29 @@ class Graph:
 
     class UnionFind(object):
         '''
+        Disjoint-set data structure to track a set of elements partitioned into multiple disjoint subsets.
         '''
 
         def __init__(self):
             self.parent = {}
+            '''
+
+            '''
             self.rank = {}
+            '''
+
+            '''
 
         def __len__(self):
+            '''
+
+            '''
             return len(self.parent)
 
         def make_set(self, item):
+            '''
+            
+            '''
             if item in self.parent:
                 return self.find(item)
 
@@ -228,6 +234,9 @@ class Graph:
             return item
 
         def find(self, item):
+            '''
+
+            '''
             if item not in self.parent:
                 return self.make_set(item)
             if item != self.parent[item]:
@@ -235,6 +244,9 @@ class Graph:
             return self.parent[item]
 
         def union(self, item1, item2):
+            '''
+
+            '''
             root1 = self.find(item1)
             root2 = self.find(item2)
 
@@ -263,10 +275,11 @@ class Graph:
                 self.parent[root2] = root1
                 return root1
 
-    def prims_mst(graph):
+    def prims_mst(graph) -> Graph:
         '''
-        Implementation of Prim's algorithm
-        Time Complexity: 
+        Adjacency matrix based implementation of [https://en.wikipedia.org/wiki/Prim's_algorithm](Prim's algorithm).
+
+        Time Complexity: O(_V_<sup>2</sup>)
         '''
         from collections import defaultdict
         from math import inf
@@ -308,10 +321,11 @@ class Graph:
         mst = Graph.build(edges=mst_edges)
         return mst
 
-    def kruskal_mst(graph):
+    def kruskal_mst(graph) -> Graph:
         '''
-        Implementation of Kruskal's algorithm
-        Time Complexity: 
+        Implementation of [https://en.wikipedia.org/wiki/Kruskal's_algorithm](Kruskal's algorithm).
+
+        Time Complexity: O(_E_ log _E_) 
         '''
         mst_edges = []
         edges = graph.get_edges()
@@ -340,7 +354,7 @@ class Graph:
         mst = Graph.build(edges=mst_edges)
         return mst
 
-    def boruvka_step(graph, num_components, union_find, mst_edges):
+    def boruvka_step(graph, num_components, union_find, mst_edges) -> (int, int, int):
         '''
         Implementation of Boruvka step
         Time Complexity: 
