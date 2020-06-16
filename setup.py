@@ -12,6 +12,8 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/chiefsan/graphmst",
+    license="MIT",
+    tests_require=["pytest"],
     py_modules="graph_mst",
     classifiers=[
         "Programming Language :: Python :: 3",
