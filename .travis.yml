@@ -10,5 +10,15 @@ script:
 - echo Checking whether installation flow is not broken...
 - pip uninstall --yes graphmst || true
 - pip install --ignore-installed .
+- git clone https://${GH_TOKEN}@github.com/chiefsan/GraphMST.git --branch master graphmst
+- cd graphmst
+- pip install pdoc3
+- pdoc graphmst.py --html -o docs/ --force
+- rm docs/index.html
+- mv docs/graphmst.html docs/index.html
+- git add docs/index.html
+- git commit -m "Travis #$TRAVIS_BUILD_NUMBER"
+- git push --force origin
+
 cache:
   pip: true
