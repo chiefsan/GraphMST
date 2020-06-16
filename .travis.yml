@@ -1,0 +1,17 @@
+language: python
+python:
+- '3.3'
+- '3.4'
+- '3.5'
+- '3.6'
+install:
+- pip uninstall --yes graphmst || true
+- pip install --upgrade --force-reinstall --ignore-installed -e .
+- pip install "pytest==4.6.9; python_version != '3.3'" "pytest==2.9.2; python_version == '3.3'" typing
+script:
+- py.test
+- echo Checking whether installation flow is not broken...
+- pip uninstall --yes graphmst || true
+- pip install --ignore-installed .
+cache:
+  pip: true
