@@ -17,7 +17,7 @@ script:
 - rm docs/index.html
 - mv docs/graphmst.html docs/index.html
 - git add docs/index.html
-- git commit -m "Travis #$TRAVIS_BUILD_NUMBER"
+- git commit --message "Travis build: $TRAVIS_BUILD_NUMBER"
 - git push --force origin
 
 cache:
