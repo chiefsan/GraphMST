@@ -1,0 +1,15 @@
+close: true
+
+lock: true
+
+issues:
+  comment: |
+    Thank you for your interest in the GraphMST project.
+    Since this repository is read-only at the moment, issues opened here are not processed now. However, they will be processed when time permits. 
+    Thank you for your time and understanding.
+
+pulls:
+  comment: |
+    Thank you for your interest in the GraphMST project.
+    Since this repository is read-only at the moment, pull requests opened here are not processed now. However, they will be processed when time permits. 
+    Thank you for your time and understanding.
